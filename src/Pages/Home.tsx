@@ -1,13 +1,11 @@
 import React from 'react';
 import { Button, Typography, CardHeader, Paper, Tabs, Tab, CardContent, Card, Grid, makeStyles, Container, CssBaseline, TextField } from '@material-ui/core';
 
-import AppBar from '@material-ui/core/AppBar';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import Toolbar from '@material-ui/core/Toolbar';
 import Link from '@material-ui/core/Link';
-import Copyright from '../Components/Copyright'
+import Copyright from '../Components/Copyright';
+import Header from '../Components/Header';
+import { useHistory } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -18,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
         width: "25ch",
         flexGrow: 1,
     },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+      },
     heroContent: {
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing(8, 0, 6),
@@ -46,9 +48,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const cards = [1, 2, 3];
 
 const Home = () => {
+    const classes = useStyles();
+    let history = useHistory();
+    const [today, setDate] = React.useState(new Date());
+  
+    const hour = today.getHours();
+    const wish = `Good ${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}, `;
+    const userGreetings = () => {
+        return (
+            <div>
+                <h2>
+                    {wish}</h2>
+            </div>
+        )
+    }
+  
 
 
     const [state, setState] = React.useState({
@@ -63,30 +79,42 @@ const Home = () => {
         setState({ ...state, [event.target.name]: event.target.value });
         //@ts-ignore
     };
-    const classes = useStyles();
+
+
+
+    React.useEffect(() => {
+        document.title = "Customer | JAMAN HP";
+        const timer = setInterval(() => {
+            setDate(new Date());
+        }, 60 * 1000);
+        return () => {
+            clearInterval(timer);
+        }
+    }, []);
 
     return (
         <React.Fragment>
             <CssBaseline />
-            <AppBar position="relative">
-                <Toolbar>
-                    <Typography variant="h6" color="inherit" noWrap>
-                        JAMAN HP GAS
-          </Typography>
-                </Toolbar>
-            </AppBar>
+            <Header/>
+      
             <main>
 
                 <div className={classes.heroContent}>
-                    <Container maxWidth="md">
-                        <Grid container className="maincontainer">
+                    <Container maxWidth="md" component="main" >
+                        
+                    
+                        <h2>{userGreetings()}</h2>
 
-                            <Grid item>
-                                <form className={classes.root} noValidate autoComplete="off">
+                        <p>Find Customer Details </p>
+                        <Grid container className="maincontainer"  style={{justifyContent:"center" , textAlign:"center"}} >
+
+                            <Grid item xs={12}  sm={12} md={3} >
+                                <form className={classes.form}  noValidate autoComplete="off">
                                     <TextField
                                         id="outlined-basic"
                                         label="Aadhaar No"
                                         variant="outlined"
+                                        fullWidth
                                         type="aadhaar"
                                         name="aadhaar"
                                         autoComplete="aadhaar"
@@ -96,13 +124,14 @@ const Home = () => {
                                     />
                                 </form>
                             </Grid>
-                            OR
-                            <Grid item>
-                                <form className={classes.root} noValidate autoComplete="off">
+                            
+                            <Grid item  xs={12}  sm={12} md={3} >
+                                <form className={classes.form}  noValidate autoComplete="off">
                                     <TextField
                                         id="outlined-basic"
                                         label="Mobile No"
                                         name="mobile"
+                                        fullWidth
                                         variant="outlined"
                                         type="tel"
                                         value={state.mobile}
@@ -110,40 +139,37 @@ const Home = () => {
                                     />
                                 </form>
                             </Grid>
-                            OR
-                            <Grid>
-                                <form className={classes.root} noValidate autoComplete="off">
+                            
+                            <Grid item  xs={12}  sm={12} md={3}>
+                                <form className={classes.form}  noValidate autoComplete="off">
                                     <TextField
                                         id="outlined-basic"
                                         label="Consumer No"
                                         name="consumer"
                                         variant="outlined"
+                                        fullWidth
                                         type="text"
                                         value={state.consumerNo}
                                         onChange={handleChange}
                                     />
                                 </form>
                             </Grid>
-                            <Grid>
-                                <form className={classes.root} noValidate autoComplete="off">
+                            <Grid item xs={12}  sm={12} md={3} >
+                                <form className={classes.form}  noValidate autoComplete="off">
                                     <TextField
                                         id="outlined-basic"
                                         label="Registration No"
                                         name="reg"
                                         variant="outlined"
+                                        fullWidth
                                         type="text"
                                         value={state.reg}
                                         onChange={handleChange}
                                     />
                                 </form>
                             </Grid>
-
-
-
-                            <Grid />
-
-                            <Grid container>
-                                <Button
+                            <div style={{textAlign:"center" , justifyContent:"center" , margin:"20px"}}>
+                            <Button
                                     variant="contained"
                                     size="large"
                                     color="primary"
@@ -151,7 +177,14 @@ const Home = () => {
                                 >
                                     FIND CUSTOMER
                 </Button>
-                            </Grid>
+                                </div>
+                  
+
+
+
+                            <Grid />
+
+                        
                         </Grid>
                     </Container>
                 </div>
