@@ -57,7 +57,7 @@ const Header=()=> {
         <Button size="large">JAMAN HP GAS</Button>
         <Typography
        variant="subtitle1" gutterBottom
-          color="inherit"
+          color="primary"
           align="center"
           noWrap
           className={classes.toolbarTitle}

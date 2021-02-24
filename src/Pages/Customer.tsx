@@ -7,7 +7,12 @@ import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Toolbar from '@material-ui/core/Toolbar';
 import Link from '@material-ui/core/Link';
-import Copyright from '../Components/Copyright'
+import Copyright from '../Components/Copyright';
+import { httpClient } from '../Common/Service';
+import { ToastContext } from "../Common/ToastProvider";
+
+
+import ResponsiveDrawer  from './Drawer'
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -16,13 +21,15 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: "column",
         alignItems: 'center',
+        marginLeft:"auto"
     },
     root: {
         margin: theme.spacing(1),
         width: "25ch",
         flexGrow: 1,
+      
     },
     heroContent: {
         backgroundColor: theme.palette.background.paper,
@@ -63,18 +70,20 @@ const cards = [1, 2, 3];
 
 const Customer = () => {
     const classes = useStyles();
+    const {showToast} = React.useContext(ToastContext);
+    const [lastUser , setLastUser]=React.useState({})
 
 
     const [customer, setCustomer] = React.useState({
         name: "",
-        mobile: "",
         mainAadhaar: "",
-        consumerNo:"",
-        faadhaar: "",
+        consumerNo: "",
+        familyAadhaar: "",
+        regNo: "",
         mainAgent: "",
         subAgent: "",
         remarks: "",
-        regNo:""
+        mobile:""
 
     });
 
@@ -83,29 +92,38 @@ const Customer = () => {
         //@ts-ignore
     };
 
-    const handleRegister = (e: any) => {
-
+    const handleRegister = async (e: any) => {
+        try{
         e.preventDefault()
-        console.log("customer data", customer)
+        const result = await httpClient("customer/add", "POST", customer)
+
+        if (result.data && result.data != null) {
+            setLastUser(result.data.result)
+            showToast("user added susccesssfully", "success")
+         
+  
+        }
+    } catch (error) {
+      console.log("something wrong " , "error")
+  
     }
+}
+
+
+    
 
 
     return (
         <React.Fragment>
                <CssBaseline />
-            <AppBar position="relative">
-                <Toolbar>
-                    <Typography variant="h6" color="inherit" noWrap>
-                        JAMAN HP GAS
-          </Typography>
-                </Toolbar>
-            </AppBar>
-
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
+                <ResponsiveDrawer/>
+                <Container maxWidth="md" style={{display:"flex"}}>
+       
+                <Grid item  xs={12} sm={12} md={6} >
+           
+                <div >
                     <h2>Add New Customer</h2>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate >
                         <Grid container spacing={2}>
                             <Grid item xs={12} >
                                 <TextField
@@ -127,6 +145,7 @@ const Customer = () => {
                                     required
                                     fullWidth
                                     id="mainAadhaar"
+                                    type="number"
                                     label="Main Aadhaar"
                                     name="mainAadhaar"
                                     autoComplete="mainAadhaar"
@@ -141,11 +160,12 @@ const Customer = () => {
                                     required
                                     fullWidth
                                     id="faadhaar"
+                                    type="number"
                                     label="Family Adhaar"
-                                    name="faadhaar"
+                                    name="familyAadhaar"
                                     autoComplete="faadhaar"
                                     onChange={handleChange}
-                                    value={customer.faadhaar}
+                                    value={customer.familyAadhaar}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -155,7 +175,7 @@ const Customer = () => {
                                     fullWidth
                                     name="mobile"
                                     label="Mobile"
-                                    type="mobile"
+                                    type="number"
                                     id="mobile"
                                     autoComplete="current-mobile"
                                     onChange={handleChange}
@@ -194,7 +214,7 @@ const Customer = () => {
                                 <TextField
                                     variant="outlined"
                                     fullWidth
-                                    name="Registration"
+                                    name="regNo"
                                     label="Registration  No"
                                     type="text"
                                     id="Registration"
@@ -209,8 +229,8 @@ const Customer = () => {
                                     fullWidth
                                     name="consumerNo"
                                     label="Consumer No"
-                                    type="text"
                                     id="consumerNo"
+                                    type="number"
                                     autoComplete="consumerNo"
                                     onChange={handleChange}
                                     value={customer.consumerNo}
@@ -229,9 +249,11 @@ const Customer = () => {
                                     value={customer.remarks}
                                 />
                             </Grid>
+                            
 
 
                         </Grid>
+                        
                         <Button
                             fullWidth
                             variant="contained"
@@ -244,8 +266,32 @@ const Customer = () => {
 
                     </form>
                 </div>
+                
+              
+                </Grid>
+                <Grid item  xs={12} sm={12} md={6}>
+                    <div style={{margin:"5px" , textAlign:"center" ,marginLeft:"10px" , marginTop:"40px"}}>
+                        <p>Last upadted user's data </p>
+                             {/* @ts-ignore */}
+                   <h4>   Name : {lastUser.name}</h4>
+                        {/* @ts-ignore */}
+                         <h3> Main Aadhaar :{lastUser.mainAadhaar}</h3>
+                             {/* @ts-ignore */}
+                         <h4> Main Agent :{lastUser.mainAgent}</h4>
 
-            </Container>
+                    </div>
+                 
+        
+
+   </Grid>
+   
+    
+                    </Container>
+        
+         
+    
+        
+    
 
         </React.Fragment >
     );

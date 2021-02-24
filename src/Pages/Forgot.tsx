@@ -72,6 +72,8 @@ const Forgot=()=> {
           JAMAN HP GAS
           </Typography>
           <h4>Code: 13816000</h4>
+
+          <p>Reset password is enabled yet!</p>
           <form noValidate>
             <TextField
               variant="outlined"

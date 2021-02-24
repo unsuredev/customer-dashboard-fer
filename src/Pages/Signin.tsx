@@ -17,6 +17,8 @@ import { CodeJson } from 'mdi-material-ui';
 // import PersonOutlinedIcon from "@material-ui/icons/PersonOutlinedIcon";
 import { ToastContext } from "../Common/ToastProvider";
 import { Link as RouterLink, useHistory } from "react-router-dom";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 
 
@@ -65,13 +67,30 @@ const SignIn = () => {
   const handleChange = (event: any) => {
     setUser({ ...user, [event.target.name]: event.target.value })
   }
+  const [passwordShown, setPasswordShown] = React.useState(false);
+
+  const togglePasswordVisiblity = () => {
+      setPasswordShown(passwordShown ? false : true);
+    };
+
+
+  let icon:any ;
+  if (passwordShown ==true) {
+    icon = <VisibilityIcon onClick={togglePasswordVisiblity} />;
+  } else if (passwordShown == false) {
+    icon = <VisibilityOffIcon onClick={togglePasswordVisiblity} />;
+  }
+  
 
   const handleSubmit = async (event: any) => {
+    
     try {
       event.preventDefault()
       const result = await httpClient("signin", "POST", user)
 
-      if (result && result != null) {
+      if (result.data && result.data != null) {
+
+        localStorage.setItem("access_token" , result.data.token)
         showToast("Loggedin susccesssfully", "success")
         history.push('/home')
 
@@ -88,7 +107,7 @@ const SignIn = () => {
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
+        <div className={classes.paper} style={{marginTop:"8rem"}}>
           {/* <PersonOutlinedIcon/> */}
           <Typography component="h1" variant="h5">
             JAMAN HP GAS
@@ -115,12 +134,15 @@ const SignIn = () => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={passwordShown ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               value={user.password}
               onChange={handleChange}
-            />
+              InputProps={{
+                endAdornment: icon
+              }}
+        />
 
             <Button
               type="submit"
@@ -132,6 +154,7 @@ const SignIn = () => {
             >
               Sign In
             </Button>
+            
             <Grid container>
               <Grid item xs>
                 <Link href="/reset" variant="body2">
