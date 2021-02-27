@@ -1,15 +1,11 @@
 import React from 'react';
-import { Button, Typography, CardHeader, Paper, Tabs, Tab, CardContent, Card, Grid, makeStyles, Container, CssBaseline, TextField } from '@material-ui/core';
-
-import AppBar from '@material-ui/core/AppBar';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import Toolbar from '@material-ui/core/Toolbar';
-import Link from '@material-ui/core/Link';
-import Copyright from '../Components/Copyright';
+import { Button, Card, Grid, makeStyles, Container, CssBaseline, TextField } from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import { httpClient } from '../Common/Service';
 import { ToastContext } from "../Common/ToastProvider";
+import FooterSection from '../Components/Footer'
 
 
 import ResponsiveDrawer  from './Drawer'
@@ -64,14 +60,19 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    formControl: {
+        minWidth: "100%",
+      },
 }));
 
-const cards = [1, 2, 3];
+
 
 const Customer = () => {
     const classes = useStyles();
     const {showToast} = React.useContext(ToastContext);
     const [lastUser , setLastUser]=React.useState({})
+    const [agentList, setAgetList] = React.useState('');
+
 
 
     const [customer, setCustomer] = React.useState({
@@ -110,6 +111,28 @@ const Customer = () => {
 }
 
 
+const handleGet = async () => {
+    
+    try {
+     
+      const result = await httpClient("agent/getall", "GET")
+      console.log("resul==>" , result.data.result)
+      setAgetList(result.data.result[0].name)
+
+
+  } catch (error) {
+    showToast("Wrong Password! try again", "error")
+}
+  }
+
+  const handleChangedropdown = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setAgetList(event.target.value as string);
+  };
+
+  React.useEffect(()=>{
+    handleGet()
+
+  },[])
     
 
 
@@ -118,6 +141,8 @@ const Customer = () => {
                <CssBaseline />
                 <ResponsiveDrawer/>
                 <Container maxWidth="md" style={{display:"flex"}}>
+                    <Grid container>
+
        
                 <Grid item  xs={12} sm={12} md={6} >
            
@@ -182,34 +207,11 @@ const Customer = () => {
                                     value={customer.mobile}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="mainAgent"
-                                    label="Main Agent"
-                                    type="mainAgent"
-                                    id="mainAgent"
-                                    autoComplete="mainAgent"
-                                    onChange={handleChange}
-                                    value={customer.mainAgent}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
+         
+     
 
-                                    fullWidth
-                                    name="subAgent"
-                                    label="Sub Agent"
-                                    type="subAgent"
-                                    id="subAgent"
-                                    autoComplete="subAgent"
-                                    onChange={handleChange}
-                                    value={customer.subAgent}
-                                />
-                            </Grid>
+
+  
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
@@ -249,6 +251,34 @@ const Customer = () => {
                                     value={customer.remarks}
                                 />
                             </Grid>
+                            <Grid item xs={12} >
+                            <FormControl variant="outlined" className={classes.formControl} >
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={agentList}
+          onChange={handleChangedropdown}
+        >
+          <MenuItem value={agentList}>{agentList}</MenuItem>
+      
+        </Select>
+      </FormControl>
+                            </Grid>
+                            
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+
+                                    fullWidth
+                                    name="subAgent"
+                                    label="Sub Agent"
+                                    type="subAgent"
+                                    id="subAgent"
+                                    autoComplete="subAgent"
+                                    onChange={handleChange}
+                                    value={customer.subAgent}
+                                />
+                            </Grid>
                             
 
 
@@ -269,25 +299,28 @@ const Customer = () => {
                 
               
                 </Grid>
-                <Grid item  xs={12} sm={12} md={6}>
-                    <div style={{margin:"5px" , textAlign:"center" ,marginLeft:"10px" , marginTop:"40px"}}>
-                        <p>Last upadted user's data </p>
+
+                <Grid item   xs={12} sm={12} md={4} style={{marginTop:"50px" , marginLeft:"2rem"}}>
+    <Card className={classes.card}>
+    <div style={{margin:"5px" , textAlign:"left" ,marginLeft:"10px" , marginTop:"40px"}}>
+                        <h1>Last saved user's details </h1>
                              {/* @ts-ignore */}
-                   <h4>   Name : {lastUser.name}</h4>
+                   <h4>Name : {lastUser.name}</h4>
                         {/* @ts-ignore */}
-                         <h3> Main Aadhaar :{lastUser.mainAadhaar}</h3>
+                    <h3> Main Aadhaar :{lastUser.mainAadhaar}</h3>
                              {/* @ts-ignore */}
-                         <h4> Main Agent :{lastUser.mainAgent}</h4>
-
+                    <h4> Main Agent :{lastUser.mainAgent}</h4>
                     </div>
-                 
-        
+    </Card>
+</Grid>
+</Grid>
 
-   </Grid>
-   
     
                     </Container>
-        
+                  
+                    <FooterSection/>
+
+             
          
     
         

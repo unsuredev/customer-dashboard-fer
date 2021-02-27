@@ -14,6 +14,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {mainListItems , secondaryListItems} from './ListItems';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 
 const drawerWidth = 240;const useStyles = makeStyles(theme => ({
@@ -55,6 +57,9 @@ function ResponsiveDrawer() {
 //   const dummyCategories = ['Hokusai', 'Hiroshige', 'Utamaro', 'Kuniyoshi', 'Yoshitoshi']
   const classes = useStyles();
   const theme = useTheme();
+
+
+  
   const [mobileOpen, setMobileOpen] = React.useState(false);function handleDrawerToggle() {
     setMobileOpen(!mobileOpen)
   }const drawer = (

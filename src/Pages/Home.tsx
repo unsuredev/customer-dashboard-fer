@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button, Typography, CardHeader, Paper, Tabs, Tab, CardContent, Card, Grid, makeStyles, Container, CssBaseline, TextField } from '@material-ui/core';
-import Copyright from '../Components/Copyright';
-import Header from '../Components/Header';
+import FooterSection from '../Components/Footer'
 import { useHistory } from "react-router-dom";
 import { httpClient } from '../Common/Service'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+import { ToastContext } from "../Common/ToastProvider";
+
 import ResponsiveDrawer  from './Drawer'
 
 
@@ -56,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
     const classes = useStyles();
     let history = useHistory();
+    const {showToast}= React.useContext(ToastContext)
 
     const [users, setUsers] = React.useState<any[]>([]);
     const [today, setDate] = React.useState(new Date());
@@ -73,11 +75,14 @@ const Home = () => {
 
 
 
+
+
     const [state, setState] = React.useState({
-        reg: "",
+        regNo: "",
         mobile: "",
         aadhaar: "",
         consumerNo: "",
+        mainAgent:""
 
     });
 
@@ -91,21 +96,54 @@ const Home = () => {
     const handleFind = async (event: any) => {
         try {
             event.preventDefault()
-            const result = await httpClient("customer/find", "POST", state)
-            console.log("data", result)
-            if (result.data && result.data != null) {
-                setUsers([result.data])
+            if (state.mobile) {
+                const result = await httpClient("customer/find", "POST", {
+                    "mobile": state.mobile, 
+                });
 
+                if (!result.data && result.data === undefined) return showToast("No result found", "error");
+                setUsers([result.data])
             }
+            if (state.aadhaar) {
+                const result = await httpClient("customer/find", "POST", {
+                    "mainAadhaar": state.aadhaar, 
+                });
+                if (!result.data && result.data === undefined) return showToast("No result found", "error");
+                setUsers([result.data])
+            }
+            if (state.consumerNo) {
+                const result = await httpClient("customer/find", "POST", {
+                    "consumerNo": state.consumerNo, 
+                });
+
+                if (!result.data && result.data === undefined) return showToast("No result found", "error");
+                setUsers([result.data])
+            }
+            if (state.regNo) {
+                const result = await httpClient("customer/find", "POST", {
+                    "regNo": state.regNo, 
+                });
+
+                if (!result.data && result.data === undefined) return showToast("No result found", "error");
+                setUsers([result.data])
+            }
+
+
         } catch (error) {
             console.log("wrong password", "error")
         }
     }
 
 
+    
+
+  
+
 
     React.useEffect(() => {
+       
         document.title = "Customer | JAMAN HP";
+    
         const timer = setInterval(() => {
             setDate(new Date());
         }, 60 * 1000);
@@ -127,14 +165,19 @@ const Home = () => {
 
                         <h2>{userGreetings()}</h2>
 
-                        <p>Find Customer Details </p>
+                        <Typography
+                                        color="secondary"
+                                        gutterBottom
+                                    >
+                                        Find Customer Details
+                                  </Typography>
                         <Grid container className="maincontainer" style={{ justifyContent: "center", textAlign: "center" }} >
 
                             <Grid item xs={12} sm={12} md={3} >
                                 <form className={classes.form} noValidate autoComplete="off">
                                     <TextField
                                         id="outlined-basic"
-                                        label="Aadhaar No"
+                                        label="Main Aadhaar No"
                                         variant="outlined"
                                         fullWidth
                                         type="aadhaar"
@@ -185,11 +228,25 @@ const Home = () => {
                                         variant="outlined"
                                         fullWidth
                                         type="text"
-                                        value={state.reg}
+                                        value={state.regNo}
                                         onChange={handleChange}
                                     />
                                 </form>
                             </Grid>
+                            {/* <Grid item xs={12} sm={12} md={2} >
+                                <form className={classes.form} noValidate autoComplete="off">
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Main Agent"
+                                        name="reg"
+                                        variant="outlined"
+                                        fullWidth
+                                        type="text"
+                                        value={state.mainAgent}
+                                        onChange={handleChange}
+                                    />
+                                </form>
+                            </Grid> */}
                             <div style={{ textAlign: "center", justifyContent: "center", margin: "20px" }}>
                                 <Button
                                     variant="contained"
@@ -211,64 +268,7 @@ const Home = () => {
                         </Grid>
                     </Container>
                 </div>
-                {/* Hero unit */}
 
-                {/* <Container className={classes.cardGrid} maxWidth="md">
-
-                <div style={{display:"flex" }}>
-
-            
-
-                    <Grid item xs={12} sm={4} md={4}>
-                        <Card className={classes.card}>
-
-                            <CardContent className={classes.cardContent}>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    Todays
-                             </Typography>
-                                <Typography>
-                                    258
-                                </Typography>
-                            </CardContent>
-
-                                </Card>
-                        </Grid>
-                        
-                    <Grid item xs={12} sm={4} md={4}>
-                    <Card className={classes.card}>
-
-                        <CardContent className={classes.cardContent}>
-                            <Typography gutterBottom variant="h5" component="h2">
-                                This Month
-                    </Typography>
-                            <Typography>
-                                25801
-                    </Typography>
-                        </CardContent>
-
-                    </Card>
-                    </Grid>
-                    
-                    <Grid item xs={12} sm={4} md={4}>
-                    <Card className={classes.card}>
-
-<CardContent className={classes.cardContent}>
-    <Typography gutterBottom variant="h5" component="h2">
-        Total
-</Typography>
-    <Typography>
-        2580025
-</Typography>
-</CardContent>
-
-</Card>
-</Grid>
-</div>
-            
-        
-
-         
-        </Container> */}
 
                 <Container className={classes.cardGrid} maxWidth="md">
                     <Grid className="maincontainer"  style={{textAlign:"center"}}>
@@ -316,18 +316,18 @@ const Home = () => {
                                     <Typography>Mobile No : {user.mobile}</Typography>
                                     {/* @ts-ignore */}
 
-                                    <Typography>Family Aadhaar : {user.familyAdhaar}</Typography>
+                                    <Typography>Family Aadhaar : {user.familyAadhaar}</Typography>
                                     {/* @ts-ignore */}
-                                    <Typography>Registration No : {user.regNo}</Typography>
+                                    <Typography>Registration No : {user.regNo ||"NA" }</Typography>
+                                    <Typography>Consumer No :{user.consumerNo ||"NA" } </Typography>
                                     {/* @ts-ignore */}
-
                                     <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
                                     {/* @ts-ignore */}
 
                                     <Typography>Main Agent : {user.mainAgent}</Typography>
                                     {/* @ts-ignore */}
 
-                                    <Typography>Sub Agent : {user.subAgent}</Typography>
+                                    <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
 
                                     {/* <Typography>App Notification enabled : {val.app_notifications_enabled ? "Yes"
                                             : "No"}</Typography> */}
@@ -342,16 +342,12 @@ const Home = () => {
                     </Grid>
                 </Container>
             </main >
-            {/* Footer */}
-            < footer className={classes.footer} >
-                <Typography variant="h6" align="center" gutterBottom>
-                    JAMAN HP
-        </Typography>
-                <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-                    jaman.mushidabad@hpgas.hpcl.co.in
-        </Typography>
-                <Copyright />
-            </footer >
+              {/* Footer */}
+      
+            <FooterSection/>
+
+          
+         
             {/* End footer */}
         </React.Fragment >
     );

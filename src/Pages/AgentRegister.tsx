@@ -1,5 +1,4 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -14,9 +13,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Copyright from '../Components/Copyright';
 import {httpClient} from '../Common/Service'
 import { CodeJson } from 'mdi-material-ui';
-// import PersonOutlinedIcon from "@material-ui/icons/PersonOutlinedIcon";
+import Container from '@material-ui/core/Container';
 import { ToastContext } from "../Common/ToastProvider";
 import { Link as RouterLink, useHistory } from "react-router-dom";
+import ResponsiveDrawer  from './Drawer'
+
 
 
 
@@ -52,16 +53,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp=()=> {
+const SignUpAgent=()=> {
   const classes = useStyles();
   let history = useHistory();
   const { showToast } = React.useContext(ToastContext);
 
   const [user , setUser]= React.useState({
       name:"",
-    email:"",
+    address:"",
     mobile:"",
-    password:""
 
   })
 
@@ -71,12 +71,11 @@ const handleChange =(event:any)=>{
 
 const handleSubmit= async(event:any)=>{
   event.preventDefault()
-  const result =  await httpClient("signup" , "POST" ,user)
+  const result =  await httpClient("agent/add" , "POST" ,user)
     localStorage.setItem("access_token"  ,result.data.token)
 
   if( result && result!= null){
     showToast("Registered susccesssfully" , "success")
-    history.push('/signin')
     
   }
 
@@ -84,16 +83,21 @@ const handleSubmit= async(event:any)=>{
 
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <React.Fragment>
+      <ResponsiveDrawer/>
+ 
+      <Container component="main" maxWidth="md">
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-        {/* <PersonOutlinedIcon/> */}
+      <Grid container>
+        <Grid item  xs={12}  sm={12} md={12}>
+
+
+      <div className={classes.paper}>
           <Typography component="h1" variant="h5">
           JAMAN HP GAS
           </Typography>
           <h4>Code: 13816000</h4>
+          <h2>Register a agent</h2>
           <form className={classes.form} noValidate>
           <TextField
               variant="outlined"
@@ -108,19 +112,7 @@ const handleSubmit= async(event:any)=>{
                                     value={user.name}
                                     onChange={handleChange}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-                                    fullWidth
-                                    id="email"
-                                    label="Email "
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                    value={user.email}
-                                    onChange={handleChange}
-            />
+
       
                    <TextField
               variant="outlined"
@@ -135,19 +127,20 @@ const handleSubmit= async(event:any)=>{
               value={user.mobile}
               onChange={handleChange}
             />
-            <TextField
+                        <TextField
               variant="outlined"
               margin="normal"
               required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={user.password}
-              onChange={handleChange}
+                                    fullWidth
+                                    id="address"
+                                    label="Full Address "
+                                    name="address"
+                                    autoComplete="address"
+                                    autoFocus
+                                    value={user.address}
+                                    onChange={handleChange}
             />
+
       
             <Button
               type="submit"
@@ -157,34 +150,25 @@ const handleSubmit= async(event:any)=>{
               className={classes.submit}
               onClick={handleSubmit}
             >
-              Sign Up
+              Register Agent
             </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
-              <Grid item>
-                <Link href="/" variant="body2">
-                  {"Login  here"}
-                </Link>
-              </Grid>
-                {/* <Grid item>
-                <Link href="#" variant="body2">
-                  {"Forgot your password? reset here"}
-                </Link>
-              </Grid> */}
+
             </Grid>
             <Box mt={20}>
               <Copyright />
             </Box>
           </form>
         </div>
+        
+        </Grid>
       </Grid>
-    </Grid>
+        </Container>
+        </React.Fragment>
+
+  
   );
 }
 
 
-export default SignUp;
+export default SignUpAgent

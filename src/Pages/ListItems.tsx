@@ -4,13 +4,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Link from '@material-ui/core/Link';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
 
 export const mainListItems = (
@@ -18,7 +17,7 @@ export const mainListItems = (
     <Link href="/home">
     <ListItem button>
       <ListItemIcon>
-        <DashboardIcon />
+        <DashboardIcon color="secondary" />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
@@ -27,7 +26,7 @@ export const mainListItems = (
     <Link href="/cst">
     <ListItem button>
       <ListItemIcon>
-        <PeopleIcon />
+        <PeopleIcon color="secondary" />
       </ListItemIcon>
       <ListItemText primary=" Customers" />
     </ListItem>
@@ -35,18 +34,29 @@ export const mainListItems = (
     <Link href="/customer">
     <ListItem button>
       <ListItemIcon>
-        <PersonAddIcon />
+        <PersonAddIcon color="secondary" />
       </ListItemIcon>
       <ListItemText primary="Register Customer" />
     </ListItem>
     </Link>
 
+    <Link href="/reports">
     <ListItem button>
       <ListItemIcon>
-        <BarChartIcon />
+        <BarChartIcon  color="secondary"/>
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>
+    </Link>
+    <Link href="/agent">
+    <ListItem button>
+      <ListItemIcon>
+        <GroupAddIcon  color="secondary"/>
+      </ListItemIcon>
+      <ListItemText primary="Agent Register" />
+    </ListItem>
+    </Link>
+
 
   </div>
 );
