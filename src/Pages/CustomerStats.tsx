@@ -47,7 +47,7 @@ const CustomerStats = () => {
     let [userlist, setUserlist] = useState<any>([])
     let [mydevices, setMydevices] = useState<any[]>([]);
 
-    const [firstDate, setFirstDate] = React.useState(new Date(moment().startOf('month').format('YYYY-MM-DD')));
+    const [firstDate, setFirstDate] = React.useState(new Date('2021-03-12'));
     const [lastDate, setLastDate] = React.useState(new Date(moment().endOf('day').format('YYYY-MM-DD')))
 
     const [open, setOpen] = React.useState(false);
@@ -137,7 +137,7 @@ const CustomerStats = () => {
     return (
         <React.Fragment>
             <ResponsiveDrawer/>
-            <Container >
+            <div style={{marginLeft:"10rem"}} >
        
 
                 <Grid container>
@@ -146,7 +146,7 @@ const CustomerStats = () => {
                         <Grid container justify="space-around">
                             <KeyboardDatePicker
                                 disableToolbar
-                                minDate={new Date('2020-10-01')}
+                                minDate={new Date('2021-03-12')}
                                 variant="inline"
                                 format="dd/MM/yyyy"
                                 margin="normal"
@@ -180,7 +180,7 @@ const CustomerStats = () => {
                        
                     </MuiPickersUtilsProvider>
                 </Grid>
-            </Container>
+            </div>
             < Container >
 
 <Grid container style={{marginTop:"50px"}}>
@@ -230,7 +230,9 @@ const CustomerStats = () => {
                                 { title: 'Name', field: 'name' },
                                 { title: 'Mobile', field: 'mobile' || "null" },
                                 {title:'Main Aadhaar' , field:'mainAadhaar' },
+                                {title:'Family Aadhaar' , field:'familyAadhaar' },
                                 {title:'Reg No' , field:'regNo' },
+                                {title:'Consumer No', field:'ConsumerNO'},
                                 {title:'Main Agent', field:'mainAgent'},
                                 {title:'Sub Agent' , field:'subAgent'},
                                 {title:"Remarks", field:"remarks"}

@@ -2,15 +2,18 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
+import Checkbox from "@material-ui/core/Checkbox";
+import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Copyright from "../Components/Copyright";
 import { httpClient } from "../Common/Service";
-import Container from "@material-ui/core/Container";
 import { ToastContext } from "../Common/ToastProvider";
 import { Link as RouterLink, useHistory } from "react-router-dom";
+import Container from "@material-ui/core/Container";
+
 import ResponsiveDrawer from "./Drawer";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,15 +49,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUpAgent = () => {
+const MemberSignUp = () => {
   const classes = useStyles();
-  let history = useHistory();
   const { showToast } = React.useContext(ToastContext);
 
   const [user, setUser] = React.useState({
     name: "",
-    address: "",
+    email: "",
     mobile: "",
+    password: "",
   });
 
   const handleChange = (event: any) => {
@@ -63,7 +66,7 @@ const SignUpAgent = () => {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const result = await httpClient("agent/add", "POST", user);
+    const result = await httpClient("signup", "POST", user);
     localStorage.setItem("access_token", result.data.token);
 
     if (result && result != null) {
@@ -80,11 +83,13 @@ const SignUpAgent = () => {
         <Grid container>
           <Grid item xs={12} sm={12} md={12}>
             <div className={classes.paper}>
+              {/* <PersonOutlinedIcon/> */}
               <Typography component="h1" variant="h5">
                 JAMAN HP GAS
               </Typography>
               <h4>Code: 13816000</h4>
-              <h2>Register a agent</h2>
+              <h2>Register a Member</h2>
+
               <form className={classes.form} noValidate>
                 <TextField
                   variant="outlined"
@@ -97,6 +102,19 @@ const SignUpAgent = () => {
                   autoComplete="name"
                   autoFocus
                   value={user.name}
+                  onChange={handleChange}
+                />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email "
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  value={user.email}
                   onChange={handleChange}
                 />
 
@@ -118,12 +136,12 @@ const SignUpAgent = () => {
                   margin="normal"
                   required
                   fullWidth
-                  id="address"
-                  label="Full Address "
-                  name="address"
-                  autoComplete="address"
-                  autoFocus
-                  value={user.address}
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={user.password}
                   onChange={handleChange}
                 />
 
@@ -135,9 +153,9 @@ const SignUpAgent = () => {
                   className={classes.submit}
                   onClick={handleSubmit}
                 >
-                  Register Agent
+                  Add Team member
                 </Button>
-                <Grid container></Grid>
+
                 <Box mt={20}>
                   <Copyright />
                 </Box>
@@ -150,4 +168,4 @@ const SignUpAgent = () => {
   );
 };
 
-export default SignUpAgent;
+export default MemberSignUp;

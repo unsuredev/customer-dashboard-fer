@@ -9,11 +9,14 @@ const  Copyright = ()=> {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit" href="https://material-ui.com/">
+        <Link color="inherit" href="/">
           JAMAN HP GAS
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
+        <p style={{fontFamily:"Pacifico"}}>  Designed and developed by    
+        <a href="https://www.linkedin.com/devjamal" target="_blank" >Jamal</a></p>
+     
       </Typography>
     );
   }

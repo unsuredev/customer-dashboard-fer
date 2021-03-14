@@ -1,239 +1,378 @@
-import React from 'react';
-import { Button, Typography, CardHeader, Paper, Tabs, Tab, CardContent, Card, Grid, makeStyles, Container, CssBaseline, TextField } from '@material-ui/core';
-import FooterSection from '../Components/Footer'
+import React from "react";
+import {
+  Button,
+  Typography,
+  CardHeader,
+  Paper,
+  Tabs,
+  Tab,
+  CardContent,
+  Card,
+  Grid,
+  makeStyles,
+  Container,
+  CssBaseline,
+  TextField,
+} from "@material-ui/core";
+import FooterSection from "../Components/Footer";
 import { useHistory } from "react-router-dom";
-import { httpClient } from '../Common/Service'
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
+import { httpClient } from "../Common/Service";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
 import { ToastContext } from "../Common/ToastProvider";
+import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import CloseIcon from '@material-ui/icons/Close';
+import moment from "moment";
+import jwt_decode from "jwt-decode";
 
-import ResponsiveDrawer  from './Drawer'
 
-
+import ResponsiveDrawer from "./Drawer";
 
 const useStyles = makeStyles((theme) => ({
-    icon: {
-        marginRight: theme.spacing(2),
-    },
-    root: {
-        margin: theme.spacing(1),
-        width: "25ch",
-        flexGrow: 1,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
-    heroContent: {
-        backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(8, 0, 6),
-    },
-    heroButtons: {
-        marginTop: theme.spacing(4),
-    },
-    cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8),
-    },
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    cardMedia: {
-        paddingTop: '56.25%', // 16:9
-    },
-    cardContent: {
-        flexGrow: 1,
-    },
-    footer: {
-        backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(6),
-    },
+  icon: {
+    marginRight: theme.spacing(2),
+  },
+  root: {
+    margin: theme.spacing(1),
+    width: "25ch",
+    flexGrow: 1,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  heroContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(8, 0, 6),
+  },
+  heroButtons: {
+    marginTop: theme.spacing(4),
+  },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+  card: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+  },
+  cardMedia: {
+    paddingTop: "56.25%", // 16:9
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
+  footer: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
+  },
 }));
 
 
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      margin: 0,
+      padding: theme.spacing(2),
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
+    },
+  });
+
+export interface DialogTitleProps extends WithStyles<typeof styles> {
+  id: string;
+  children: React.ReactNode;
+  onClose: () => void;
+}
+const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+
+const DialogContent = withStyles((theme: Theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles((theme: Theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
+
 const Home = () => {
-    const classes = useStyles();
-    let history = useHistory();
-    const {showToast}= React.useContext(ToastContext)
+  const classes = useStyles();
+  let history = useHistory();
+  const { showToast } = React.useContext(ToastContext);
 
-    const [users, setUsers] = React.useState<any[]>([]);
-    const [today, setDate] = React.useState(new Date());
+  const [users, setUsers] = React.useState<any[]>([]);
+  const [today, setDate] = React.useState(new Date());
+  const [open, setOpen] = React.useState(false);
+  const [nameuser , setNameuser ]=React.useState("")
 
-    const hour = today.getHours();
-    const wish = `Good ${(hour < 12 && 'Morning') || (hour < 17 && 'Afternoon') || 'Evening'}, `;
-    const userGreetings = () => {
-        return (
-            <div>
-                <h2>
-                    {wish}</h2>
-            </div>
-        )
-    }
+  const [userObj , setUserObj] = React.useState({})
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
+  const handleSubmit=()=>{
+    setOpen(false);
 
-
-
-    const [state, setState] = React.useState({
-        regNo: "",
-        mobile: "",
-        aadhaar: "",
-        consumerNo: "",
-        mainAgent:""
-
-    });
-
-    const handleChange = (event: any) => {
-        setState({ ...state, [event.target.name]: event.target.value });
-        //@ts-ignore
-    };
+    console.log("customer" , customer)
+    showToast("Consumer Updated successfully" ,  "success")
+  }
 
 
-
-    const handleFind = async (event: any) => {
-        try {
-            event.preventDefault()
-            if (state.mobile) {
-                const result = await httpClient("customer/find", "POST", {
-                    "mobile": state.mobile, 
-                });
-
-                if (!result.data && result.data === undefined) return showToast("No result found", "error");
-                setUsers([result.data])
-            }
-            if (state.aadhaar) {
-                const result = await httpClient("customer/find", "POST", {
-                    "mainAadhaar": state.aadhaar, 
-                });
-                if (!result.data && result.data === undefined) return showToast("No result found", "error");
-                setUsers([result.data])
-            }
-            if (state.consumerNo) {
-                const result = await httpClient("customer/find", "POST", {
-                    "consumerNo": state.consumerNo, 
-                });
-
-                if (!result.data && result.data === undefined) return showToast("No result found", "error");
-                setUsers([result.data])
-            }
-            if (state.regNo) {
-                const result = await httpClient("customer/find", "POST", {
-                    "regNo": state.regNo, 
-                });
-
-                if (!result.data && result.data === undefined) return showToast("No result found", "error");
-                setUsers([result.data])
-            }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
-        } catch (error) {
-            console.log("wrong password", "error")
-        }
-    }
-
-
-    
-
-  
-
-
-    React.useEffect(() => {
-       
-        document.title = "Customer | JAMAN HP";
-    
-        const timer = setInterval(() => {
-            setDate(new Date());
-        }, 60 * 1000);
-        return () => {
-            clearInterval(timer);
-        }
-    }, []);
-
+  const hour = today.getHours();
+  const wish = `Good ${
+    (hour < 12 && "Morning") || (hour < 17 && "Afternoon") || "Evening"
+  }, `;
+  const userGreetings = () => {
     return (
-        <React.Fragment>
-            <CssBaseline />
-            <ResponsiveDrawer />
+      <div>
+        <h2>{wish}{nameuser}</h2>
+      </div>
+    );
+  };
 
-            <main>
+  const [state, setState] = React.useState({
+    regNo: "",
+    mobile: "",
+    aadhaar: "",
+    consumerNo: "",
+    mainAgent: "",
+  });
 
-                <div className={classes.heroContent}>
-                    <Container maxWidth="md" component="main" >
+
+  const findName=() => {
+    let token: any = localStorage.getItem("access_token");
+
+    var decoded = jwt_decode(token);
+    //@ts-ignore
+    let { name } = decoded;
+    if (name ) {
+      setNameuser(name)
+    }
+  }
 
 
-                        <h2>{userGreetings()}</h2>
+  const handleChange = (event: any) => {
+    setState({ ...state, [event.target.name]: event.target.value });
+    //@ts-ignore
+   };
 
-                        <Typography
-                                        color="secondary"
-                                        gutterBottom
-                                    >
-                                        Find Customer Details
-                                  </Typography>
-                        <Grid container className="maincontainer" style={{ justifyContent: "center", textAlign: "center" }} >
 
-                            <Grid item xs={12} sm={12} md={3} >
-                                <form className={classes.form} noValidate autoComplete="off">
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Main Aadhaar No"
-                                        variant="outlined"
-                                        fullWidth
-                                        type="aadhaar"
-                                        name="aadhaar"
-                                        autoComplete="aadhaar"
-                                        autoFocus
-                                        value={state.aadhaar}
-                                        onChange={handleChange}
-                                    />
-                                </form>
-                            </Grid>
+   const [customer, setCustomer] = React.useState({
+    name: "",
+    mainAadhaar: "",
+    consumerNo: "",
+    familyAadhaar: "",
+    regNo: "",
+    mainAgent: "",
+    subAgent: "",
+    remarks: "",
+    mobile: "",
+    addedBy: "",
+  });
 
-                            <Grid item xs={12} sm={12} md={3} >
-                                <form className={classes.form} noValidate autoComplete="off">
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Mobile No"
-                                        name="mobile"
-                                        fullWidth
-                                        variant="outlined"
-                                        type="tel"
-                                        value={state.mobile}
-                                        onChange={handleChange}
-                                    />
-                                </form>
-                            </Grid>
+  const handleChangeUser = (event: any) => {
+    setCustomer({ ...customer, [event.target.name]: event.target.value });
+    //@ts-ignore
+  };
 
-                            <Grid item xs={12} sm={12} md={3}>
-                                <form className={classes.form} noValidate autoComplete="off">
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Consumer No"
-                                        name="consumer"
-                                        variant="outlined"
-                                        fullWidth
-                                        type="text"
-                                        value={state.consumerNo}
-                                        onChange={handleChange}
-                                    />
-                                </form>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={3} >
-                                <form className={classes.form} noValidate autoComplete="off">
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Registration No"
-                                        name="reg"
-                                        variant="outlined"
-                                        fullWidth
-                                        type="text"
-                                        value={state.regNo}
-                                        onChange={handleChange}
-                                    />
-                                </form>
-                            </Grid>
-                            {/* <Grid item xs={12} sm={12} md={2} >
+
+
+  const handleFind = async (event: any) => {
+    try {
+      event.preventDefault();
+      if (state.mobile) {
+        const result = await httpClient("customer/find", "POST", {
+          mobile: state.mobile,
+        });
+
+        if (!result.data && result.data === undefined)
+          return showToast("No result found", "error");
+        setUsers([result.data]);
+        setCustomer(result.data);
+       
+      }
+      if (state.aadhaar) {
+        const result = await httpClient("customer/find", "POST", {
+          mainAadhaar: state.aadhaar,
+        });
+        if (!result.data && result.data === undefined)
+          return showToast("No result found", "error");
+        setUsers([result.data]);
+        //@ts-ignore
+        setCustomer(result.data);
+       
+      }
+      if (state.consumerNo) {
+        const result = await httpClient("customer/find", "POST", {
+          consumerNo: state.consumerNo,
+        });
+
+        if (!result.data && result.data === undefined)
+          return showToast("No result found", "error");
+        setUsers([result.data]);
+           {/* @ts-ignore */}
+        setCustomer(result.data);
+        console.log("custome==>" , customer)
+      }
+      if (state.regNo) {
+        const result = await httpClient("customer/find", "POST", {
+          regNo: state.regNo,
+        });
+
+        if (!result.data && result.data === undefined)
+          return showToast("No result found", "error");
+        setUsers([result.data]);
+        setCustomer(result.data);
+           //@ts-ignore
+       
+      }
+    } catch (error) {
+      showToast("Something went wrong", "error");
+    }
+  };
+
+  const handleDelete = async (customer: any) => {
+    console.log("customer", customer);
+    try {
+      const result = await httpClient("customer/delete", "POST", {
+        customerId: customer._id,
+      });
+      if (result && result != undefined) {
+        showToast("Customer deleted successfullly", "success");
+      }
+    } catch (error) {
+      showToast("Something went wrong", "error");
+    }
+  };
+
+  React.useEffect(() => {
+    document.title = "Customer | JAMAN HP";
+    findName()
+
+    const timer = setInterval(() => {
+      setDate(new Date());
+    }, 60 * 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <ResponsiveDrawer />
+
+      <main style={{marginLeft:"4rem"}}>
+        <div className={classes.heroContent}>
+          
+          <Container maxWidth="md" component="main">
+            <h2 style={{textAlign:"center"}}>Welcome to Jaman HP Gas</h2>
+          <h2>{userGreetings()} </h2>
+
+<Typography color="secondary" gutterBottom>
+  Find Customer Details
+</Typography>
+       
+            <Grid
+              container
+              className="maincontainer"
+              style={{ justifyContent: "center", textAlign: "center" }}
+            >
+              
+              <Grid item xs={12} sm={12} md={3}>
+                <form className={classes.form} noValidate autoComplete="off">
+                  <TextField
+                    id="outlined-basic"
+                    label="Main Aadhaar No"
+                    variant="outlined"
+                    fullWidth
+                    type="aadhaar"
+                    name="aadhaar"
+                    autoComplete="aadhaar"
+                    autoFocus
+                    value={state.aadhaar}
+                    onChange={handleChange}
+                 
+                  />
+                </form>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={3}>
+                <form className={classes.form} noValidate autoComplete="off">
+                  <TextField
+                    id="outlined-basic"
+                    label="Mobile No"
+                    name="mobile"
+                    fullWidth
+                    variant="outlined"
+                    type="tel"
+                    value={state.mobile}
+                    onChange={handleChange}
+                  />
+                </form>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={3}>
+                <form className={classes.form} noValidate autoComplete="off">
+                  <TextField
+                    id="outlined-basic"
+                    label="Consumer No"
+                    name="consumer"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={state.consumerNo}
+                    onChange={handleChange}
+                  />
+                </form>
+              </Grid>
+              <Grid item xs={12} sm={12} md={3}>
+                <form className={classes.form} noValidate autoComplete="off">
+                  <TextField
+                    id="outlined-basic"
+                    label="Registration No"
+                    name="reg"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={state.regNo}
+                    onChange={handleChange}
+                  />
+                </form>
+              </Grid>
+              {/* <Grid item xs={12} sm={12} md={2} >
                                 <form className={classes.form} noValidate autoComplete="off">
                                     <TextField
                                         id="outlined-basic"
@@ -247,111 +386,277 @@ const Home = () => {
                                     />
                                 </form>
                             </Grid> */}
-                            <div style={{ textAlign: "center", justifyContent: "center", margin: "20px" }}>
-                                <Button
-                                    variant="contained"
-                                    size="large"
-                                    color="primary"
-                                    onClick={handleFind}
+              <div
+                style={{
+                  textAlign: "center",
+                  justifyContent: "center",
+                  margin: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  size="large"
+                  color="primary"
+                  onClick={handleFind}
+                >
+                  FIND CUSTOMER
+                </Button>
+              </div>
 
-                                >
-                                    FIND CUSTOMER
-                             </Button>
-                            </div>
+              <Grid />
+            </Grid>
+          </Container>
+        </div>
 
+        <Container className={classes.cardGrid} maxWidth="md">
+          <Grid className="maincontainer" style={{ textAlign: "center" }}>
+            {users.length === 0 && (
+              <h2>Your Customer data will display here!...........</h2>
+            )}
+          </Grid>
+          <div>
+    
 
+    </div>
+          {/* {loading ? <div style={{ display: 'flex', justifyContent: 'center' }}><CircularProgress /> </div> : */}
+          <Grid container spacing={4} className="maincontainer">
+            {users.map((user, i) => (
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                style={{
+                  justifyContent: "center",
+                  alignContent: "center",
+                  textAlign: "left",
+                }}
+              >
+                <Card className={classes.card} key={i} >
+                  <CardContent className={classes.cardContent} style={{marginLeft:"2rem"}}>
+                    <Typography color="textSecondary" gutterBottom>
+                      Customer's Details
+                    </Typography>
+                    <CardHeader
+                      action={
+                        <div>
+                          <IconButton aria-label="settings" onClick={handleClickOpen}>
+                            <EditIcon  onClick={handleClickOpen}/>
+                          </IconButton>
+                          <IconButton
+                            aria-label="settings"
+                            onClick={() => handleDelete(user)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      }
+                      //@ts-ignore
+                      title={user.name}
+                    />
+                    <CardHeader style={{ textAlign: "center" }} />
+                    <div >
+               
+                    {/* @ts-ignore */}
+                    <Typography>Name : {user.name}</Typography>
+                    {/* @ts-ignore */}
+                    <Typography>Mobile No : {user.mobile}</Typography>
+                    {/* @ts-ignore */}
+                    <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
+                      {/* @ts-ignore */}
+                    <Typography>
+                      Family Aadhaar : {user.familyAadhaar}
+                    </Typography>
+                    {/* @ts-ignore */}
+                    <Typography>
+                      Registration No : {user.regNo || "NA"}
+                    </Typography>
+                    <Typography>
+                      Consumer No :{user.consumerNo || "NA"}{" "}
+                    </Typography>
+                    {/* @ts-ignore */}
+                   
+                    {/* @ts-ignore */}
 
+                    <Typography>Main Agent : {user.mainAgent}</Typography>
+                    {/* @ts-ignore */}
 
-                            <Grid />
+                    <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
+                    <Typography>Remarks : {user.remarks || "NA"}</Typography>
+                    <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
+                    <Typography variant="subtitle2" gutterBottom color="primary"> Date: {moment(user.createdAt).format('LLL')}</Typography>
 
+                   
 
-                        </Grid>
-                    </Container>
-                </div>
+                  </div>
+                  </CardContent>
+                  <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+          Update Customer Data :
+        </DialogTitle>
+        <DialogContent dividers>
+        {users.map((user, i) => (
+          <Grid container>
+            
+       
+          <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+          <TextField
+                    id="outlined-basic"
+                    label="Name"
+                    name="name"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.name}
+                    onChange={handleChangeUser}
+                  />
+                
 
-
-                <Container className={classes.cardGrid} maxWidth="md">
-                    <Grid className="maincontainer"  style={{textAlign:"center"}}>
-                        {users.length === 0 && (
-                            <h2>Your Customer data will display here!...........</h2>
-                        )}
-                    </Grid>
-                    {/* {loading ? <div style={{ display: 'flex', justifyContent: 'center' }}><CircularProgress /> </div> : */}
-                    <Grid container spacing={4} className="maincontainer"
-                    >
-                          {users.map((user, i) => (
-                        <Grid item xs={12} sm={12} md={6} style={{justifyContent:"center" , alignContent:"center" , textAlign:"center"}}>
-                              
-
-                            <Card className={classes.card} key={i}>
-                                <CardContent className={classes.cardContent}>
-                                    <Typography
-                                        color="textSecondary"
-                                        gutterBottom
-                                    >
-                                        Customer's Details
-                                  </Typography>
-                                    <CardHeader
-
-                                        action={
-                                            <div>
-                                                <IconButton aria-label="settings" >
-                                                    <EditIcon />
-                                                </IconButton>
-                                                <IconButton aria-label="settings" >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </div>
-                                        }
-                                        //@ts-ignore
-                                        title={user.name}
-
-                                    />
-                                    <CardHeader style={{ textAlign: "center" }}
-
-                                    />
-                                    {/* @ts-ignore */}
-                                    <Typography>Name : {user.name}</Typography>
-                                    {/* @ts-ignore */}
-                                    <Typography>Mobile No : {user.mobile}</Typography>
-                                    {/* @ts-ignore */}
-
-                                    <Typography>Family Aadhaar : {user.familyAadhaar}</Typography>
-                                    {/* @ts-ignore */}
-                                    <Typography>Registration No : {user.regNo ||"NA" }</Typography>
-                                    <Typography>Consumer No :{user.consumerNo ||"NA" } </Typography>
-                                    {/* @ts-ignore */}
-                                    <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
-                                    {/* @ts-ignore */}
-
-                                    <Typography>Main Agent : {user.mainAgent}</Typography>
-                                    {/* @ts-ignore */}
-
-                                    <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
-
-                                    {/* <Typography>App Notification enabled : {val.app_notifications_enabled ? "Yes"
-                                            : "No"}</Typography> */}
-                                    {/* <Typography>Home Name : {val.device.home_name.join()}</Typography> */}
-                                    {/* @ts-ignore */}
-
-                                    {/* <Typography>Registered On : {moment(val.createdAt).format('LLLL')}</Typography> */}
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                          ))}
-                    </Grid>
-                </Container>
-            </main >
-              {/* Footer */}
+          </Grid>
       
-            <FooterSection/>
 
-          
-         
-            {/* End footer */}
-        </React.Fragment >
-    );
+          <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+            <TextField
+                    id="outlined-basic"
+                    label="Mobile"
+                    name="mobile"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.mobile}
+                    onChange={handleChangeUser}
+                  />
+                  </Grid>
+                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+
+         <TextField
+                    id="outlined-basic"
+                    label="Main Aadhaar"
+                    name="mainAadhaar"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.mainAadhaar}
+                    onChange={handleChangeUser}
+                  />
+                  </Grid>
+                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+
+                        <TextField
+                    id="outlined-basic"
+                    label="Family Aadhaar"
+                    name="familyAadhaar"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.familyAadhaar}
+                    onChange={handleChangeUser}
+                  />
+                  </Grid>
+                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+
+<TextField
+id="outlined-basic"
+label="Sub Agent"
+name="subAgent"
+variant="outlined"
+fullWidth
+type="text"
+value={customer.subAgent}
+onChange={handleChangeUser}
+/>
+</Grid>
+                  {customer.regNo &&
+                                  <TextField
+                    id="outlined-basic"
+                    label="Reg No"
+                    name="regNo"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.regNo}
+                    onChange={handleChangeUser}
+                  />
 }
+</Grid>
+<Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
 
+                  {customer.consumerNo &&
+                                  <TextField
+                    id="outlined-basic"
+                    label="Consumer No"
+                    name="consumerNo"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.consumerNo}
+                    onChange={handleChangeUser}
+                  />
+}
+</Grid>
+<Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
 
-export default Home
+                                             <TextField
+                    id="outlined-basic"
+                    label="Main Agent"
+                    name="mainAgent"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.mainAgent}
+                    onChange={handleChangeUser}
+                  />
+                  </Grid>
+                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+
+                                             <TextField
+                    id="outlined-basic"
+                    label="Sub Agent"
+                    name="subAgent"
+                    variant="outlined"
+                    fullWidth
+                    type="text"
+                    value={customer.subAgent}
+                    onChange={handleChangeUser}
+                  />
+                  </Grid>
+                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+
+<TextField
+id="outlined-basic"
+label="Remarks"
+name="remarks"
+variant="outlined"
+fullWidth
+type="text"
+value={customer.remarks}
+onChange={handleChangeUser}
+/>
+</Grid>
+                  </Grid>
+        ))
+}
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleSubmit} color="primary"   >
+            Save & Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </main>
+      {/* Footer */}
+
+      <FooterSection />
+
+      {/* End footer */}
+    </React.Fragment>
+  );
+};
+
+export default Home;

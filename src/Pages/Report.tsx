@@ -75,6 +75,7 @@ const Reports = () => {
     const classes = useStyles();
     const [customerTotal , setCustomerTotal]=React.useState("")
     const [memberCount , setMemberCount] = React.useState("")
+    const [agent , setAgent]= React.useState("")
     const [loading, setLoading] = useState(true)
 
 
@@ -89,6 +90,7 @@ const Reports = () => {
             if(result.data){
             setCustomerTotal(result.data.CustomerCount)
             setMemberCount(result.data.userCount)
+            setAgent(result.data.agentCount)
             setLoading(false)
 
             }
@@ -154,7 +156,7 @@ const Reports = () => {
 
                                         <CardContent className={classes.cardContent}>
                                             <Typography gutterBottom variant="h5" component="h2">
-                                                Team Member Count 
+                                                Total Member  
                                         </Typography>
                                             <Typography>
                                                 {memberCount}
@@ -166,6 +168,22 @@ const Reports = () => {
                                     </Card>
                                 </Grid>
 
+                                <Grid item xs={12} sm={12} md={6}>
+                                    <Card className={classes.card}>
+
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                Total Agent  
+                                        </Typography>
+                                            <Typography>
+                                                {agent}
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions>
+
+                                        </CardActions>
+                                    </Card>
+                                </Grid>
 
 
                             </Grid>

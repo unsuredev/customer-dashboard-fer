@@ -9,54 +9,53 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Link from '@material-ui/core/Link';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
+import SearchIcon from '@material-ui/icons/Search';
 
 export const mainListItems = (
   <div>
+        <Link href="/customer">
+    <ListItem button>
+      <ListItemIcon>
+        <PersonAddIcon color="secondary" />
+      </ListItemIcon>
+      <ListItemText primary="Consumer Registration" />
+    </ListItem>
+    </Link>
     <Link href="/home">
     <ListItem button>
       <ListItemIcon>
-        <DashboardIcon color="secondary" />
+        <SearchIcon color="secondary" />
       </ListItemIcon>
-      <ListItemText primary="Dashboard" />
+      <ListItemText primary="Find Consumer" />
     </ListItem>
     </Link>
 
     <Link href="/cst">
     <ListItem button>
       <ListItemIcon>
-        <PeopleIcon color="secondary" />
+        <GetAppIcon color="secondary" />
       </ListItemIcon>
-      <ListItemText primary=" Customers" />
+      <ListItemText primary="Download Reports" />
     </ListItem>
     </Link>
-    <Link href="/customer">
-    <ListItem button>
-      <ListItemIcon>
-        <PersonAddIcon color="secondary" />
-      </ListItemIcon>
-      <ListItemText primary="Register Customer" />
-    </ListItem>
-    </Link>
+
 
     <Link href="/reports">
     <ListItem button>
       <ListItemIcon>
         <BarChartIcon  color="secondary"/>
       </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItem>
-    </Link>
-    <Link href="/agent">
-    <ListItem button>
-      <ListItemIcon>
-        <GroupAddIcon  color="secondary"/>
-      </ListItemIcon>
-      <ListItemText primary="Agent Register" />
+      <ListItemText primary="Dashboard" />
     </ListItem>
     </Link>
 
+
+
+
+    
 
   </div>
 );

@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/red'
-
+import indigo from '@material-ui/core/colors/indigo';
+import pink from '@material-ui/core/colors/pink'
+import MemberSignUp from './Pages/MemberRegister'
 import SignIn from './Pages/Signin';
 import SignUpAgent from './Pages/AgentRegister';
 import Forgot from './Pages/Forgot';
@@ -20,8 +20,8 @@ const theme = createMuiTheme(
 
   {
     palette: {
-      primary: blue,
-      secondary: red,
+      primary: indigo,
+      secondary: pink,
     },
   });
 
@@ -35,6 +35,7 @@ const App=()=> {
       <ToastProvider>
         <Router>
           <Switch>
+          <Route exact path="/member" component={MemberSignUp} />
           <Route exact path="/home" component={Home} />
           <Route exact path="/customer" component={Customer} />
             <Route exact path="/" component={SignIn} />
@@ -44,6 +45,7 @@ const App=()=> {
             <Route exact path="/res" component={ResponsiveDrawer} />
             <Route exact path="/cst" component={CustomerStats} />
             <Route exact path="/reports" component={Reports} />
+
 
           
           </Switch>
