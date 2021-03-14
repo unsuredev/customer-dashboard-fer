@@ -349,7 +349,7 @@ const Home = () => {
                   <TextField
                     id="outlined-basic"
                     label="Consumer No"
-                    name="consumer"
+                    name="consumerNo"
                     variant="outlined"
                     fullWidth
                     type="text"
@@ -363,7 +363,7 @@ const Home = () => {
                   <TextField
                     id="outlined-basic"
                     label="Registration No"
-                    name="reg"
+                    name="regNo"
                     variant="outlined"
                     fullWidth
                     type="text"
