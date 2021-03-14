@@ -457,6 +457,8 @@ const Home = () => {
                     <CardHeader style={{ textAlign: "center" }} />
                     <div >
                
+                {/* @ts-ignore */}
+                <Typography>Sl No : {user.slNo || "NA"}</Typography>
                     {/* @ts-ignore */}
                     <Typography>Name : {user.name}</Typography>
                     {/* @ts-ignore */}
@@ -483,9 +485,14 @@ const Home = () => {
 
                     <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
                     <Typography>Remarks : {user.remarks || "NA"}</Typography>
-                    <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
-                    <Typography variant="subtitle2" gutterBottom color="primary"> Date: {moment(user.createdAt).format('LLL')}</Typography>
+                        {/* @ts-ignore */}
 
+                        <Typography>Created On : {user.date || "NA"}</Typography>
+                    
+                    <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
+                    {user.updatedAt!=undefined &&
+                    <Typography variant="subtitle2" gutterBottom color="primary">Updated On: {moment(user.updatedAt).format('LLL') || "NA"}</Typography>
+                    }
                    
 
                   </div>
@@ -554,19 +561,7 @@ const Home = () => {
                   />
                   </Grid>
                   <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
-                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
 
-<TextField
-id="outlined-basic"
-label="Sub Agent"
-name="subAgent"
-variant="outlined"
-fullWidth
-type="text"
-value={customer.subAgent}
-onChange={handleChangeUser}
-/>
-</Grid>
                   {customer.regNo &&
                                   <TextField
                     id="outlined-basic"
