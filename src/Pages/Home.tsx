@@ -137,12 +137,10 @@ const Home = () => {
     setOpen(true);
   };
 
-  const handleSubmit=()=>{
-    setOpen(false);
 
-    console.log("customer" , customer)
-    showToast("Consumer Updated successfully" ,  "success")
-  }
+
+
+
 
 
   const handleClose = () => {
@@ -263,6 +261,21 @@ const Home = () => {
     }
   };
 
+
+  const handleupdate = async () => {
+    setOpen(false);
+    try {
+      const result = await httpClient("customer/update", "POST",
+       {
+        data:customer
+      });
+      if (result && result != undefined) {
+        showToast("Customer updated successfullly", "success");
+      }
+    } catch (error) {
+      showToast("Something went wrong", "error");
+    }
+  };
   const handleDelete = async (customer: any) => {
     console.log("customer", customer);
     try {
@@ -276,6 +289,9 @@ const Home = () => {
       showToast("Something went wrong", "error");
     }
   };
+
+
+
 
   React.useEffect(() => {
     document.title = "Customer | JAMAN HP";
@@ -461,14 +477,15 @@ const Home = () => {
                 <Typography>Sl No : {user.slNo || "NA"}</Typography>
                     {/* @ts-ignore */}
                     <Typography>Name : {user.name}</Typography>
-                    {/* @ts-ignore */}
-                    <Typography>Mobile No : {user.mobile}</Typography>
+                 
                     {/* @ts-ignore */}
                     <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
                       {/* @ts-ignore */}
                     <Typography>
                       Family Aadhaar : {user.familyAadhaar}
                     </Typography>
+                       {/* @ts-ignore */}
+                       <Typography>Mobile No : {user.mobile}</Typography>
                     {/* @ts-ignore */}
                     <Typography>
                       Registration No : {user.regNo || "NA"}
@@ -634,7 +651,7 @@ onChange={handleChangeUser}
 }
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleSubmit} color="primary"   >
+          <Button autoFocus onClick={handleupdate} color="primary"   >
             Save & Update
           </Button>
         </DialogActions>

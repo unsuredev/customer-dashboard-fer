@@ -243,6 +243,7 @@ const CustomerStats = () => {
                             data={userlist}
                             options={{
                                 exportButton: true,
+                                exportAllData: true ,
                                 filtering: true,
                                 sorting: true,
                                 pageSizeOptions: [5, 20, 50, 100, 200, 500],
