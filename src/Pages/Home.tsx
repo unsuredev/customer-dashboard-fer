@@ -271,6 +271,7 @@ const Home = () => {
       });
       if (result && result != undefined) {
         showToast("Customer updated successfullly", "success");
+        console.log("updated" ,result)
       }
     } catch (error) {
       showToast("Something went wrong", "error");
@@ -284,18 +285,31 @@ const Home = () => {
       });
       if (result && result != undefined) {
         showToast("Customer deleted successfullly", "success");
-      }
+        window.location.reload();      
+        }
     } catch (error) {
       showToast("Something went wrong", "error");
     }
   };
 
+  const getUser = () => {
+    let token: any = localStorage.getItem("access_token");
 
+    var decoded = jwt_decode(token);
+    //@ts-ignore
+    let { email } = decoded;
+    if (email === "jaman2021@gmail.com") {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
 
   React.useEffect(() => {
     document.title = "Customer | JAMAN HP";
     findName()
+    getUser()
 
     const timer = setInterval(() => {
       setDate(new Date());
@@ -459,12 +473,14 @@ const Home = () => {
                           <IconButton aria-label="settings" onClick={handleClickOpen}>
                             <EditIcon  onClick={handleClickOpen}/>
                           </IconButton>
+                          {getUser()?
                           <IconButton
                             aria-label="settings"
                             onClick={() => handleDelete(user)}
                           >
                             <DeleteIcon />
-                          </IconButton>
+                          </IconButton>:null
+                      }
                         </div>
                       }
                       //@ts-ignore

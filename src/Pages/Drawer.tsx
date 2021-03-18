@@ -113,12 +113,12 @@ function ResponsiveDrawer() {
                 <ListItemText primary="Agent Registration" />
               </ListItem>
             </Link>
-            <Link href="/agent">
+            <Link href="/agentlist">
               <ListItem button>
                 <ListItemIcon>
                   <SettingsIcon color="secondary" />
                 </ListItemIcon>
-                <ListItemText primary="User Management" />
+                <ListItemText primary="Agent Management" />
               </ListItem>
             </Link>
      

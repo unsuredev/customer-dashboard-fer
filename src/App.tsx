@@ -10,7 +10,8 @@ import Home from './Pages/Home';
 import Customer from './Pages/Customer';
 import ResponsiveDrawer from './Pages/Drawer';
 import CustomerStats  from './Pages/CustomerStats';
-import Reports from './Pages/Report'
+import Reports from './Pages/Report';
+import AgentList from './Pages/AgentList'
 
 import { ToastProvider } from "./Common/ToastProvider";
 import './App.css';
@@ -45,6 +46,8 @@ const App=()=> {
             <Route exact path="/res" component={ResponsiveDrawer} />
             <Route exact path="/cst" component={CustomerStats} />
             <Route exact path="/reports" component={Reports} />
+            <Route exact path="/agentlist" component={AgentList} />
+
 
 
           

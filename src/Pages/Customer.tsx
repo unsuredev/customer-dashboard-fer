@@ -113,24 +113,16 @@ const Customer = () => {
     try {
       e.preventDefault();
       const result = await httpClient("customer/add", "POST", customer);
-
       if (result.data && result.data != null) {
         setLastUser(result.data.result);
         showToast("user added susccesssfully", "success");
       }
     } catch (error) {
-      console.log("something wrong ", "error");
+      showToast(error.message, "error");
     }
   };
 
-  const handleGet = async () => {
-    try {
-      const result = await httpClient("agent/getall", "GET");
-      console.log("resul==>", result.data.result);
-    } catch (error) {
-      showToast("Wrong Password! try again", "error");
-    }
-  };
+
 
   const handleChangedropdown = (
     event: React.ChangeEvent<{ value: unknown }>
@@ -138,9 +130,6 @@ const Customer = () => {
     setAgetList(event.target.value as string);
   };
 
-  React.useEffect(() => {
-    handleGet();
-  }, []);
 
   return (
     <React.Fragment>

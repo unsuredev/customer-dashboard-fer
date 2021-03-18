@@ -1,5 +1,5 @@
 export  const BASE_URL =
-    process.env.BASE_URL || "https://jamanenterprise.herokuapp.com/"
+    process.env.BASE_URL || "http://localhost:5001/"
 
 
 
