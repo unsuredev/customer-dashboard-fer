@@ -18,7 +18,8 @@ import { Link as RouterLink, useHistory } from "react-router-dom";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
-
+import { BASE_URL } from "../Common/constant";
+import axios from "axios";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -68,35 +69,39 @@ const SignIn = () => {
   const [passwordShown, setPasswordShown] = React.useState(false);
 
   const togglePasswordVisiblity = () => {
-      setPasswordShown(passwordShown ? false : true);
-    };
+    setPasswordShown(passwordShown ? false : true);
+  };
 
 
-  let icon:any ;
-  if (passwordShown ==true) {
+  let icon: any;
+  if (passwordShown == true) {
     icon = <VisibilityIcon onClick={togglePasswordVisiblity} />;
   } else if (passwordShown == false) {
     icon = <VisibilityOffIcon onClick={togglePasswordVisiblity} />;
   }
-  
+
 
   const handleSubmit = async (event: any) => {
-    
+
     try {
       event.preventDefault()
-      const result = await httpClient("signin", "POST", user)
-
-      if (result.data && result.data != null) {
-
-        localStorage.setItem("access_token" , result.data.token)
+      const result = await axios.post(BASE_URL + "signin", user)
+      if (result.data.data && result.data.data != null) {
+        localStorage.setItem("access_token", result.data.data.token)
         showToast("Loggedin susccesssfully", "success")
         history.push('/home')
 
       }
-  } catch (error) {
-    showToast("Wrong Password! try again", "error")
-}
+    } catch (error) {
+      if (error) {
+
+        showToast(error.response.data.message, "error")
+
+      }
+    }
   }
+
+
 
 
 
@@ -105,7 +110,7 @@ const SignIn = () => {
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper} style={{marginTop:"8rem"}}>
+        <div className={classes.paper} style={{ marginTop: "8rem" }}>
           {/* <PersonOutlinedIcon/> */}
           <Typography component="h1" variant="h5">
             JAMAN HP GAS
@@ -140,7 +145,7 @@ const SignIn = () => {
               InputProps={{
                 endAdornment: icon
               }}
-        />
+            />
 
             <Button
               type="submit"
@@ -152,7 +157,7 @@ const SignIn = () => {
             >
               Sign In
             </Button>
-            
+
             <Grid container>
               {/* <Grid item xs>
                 <Link href="/reset" variant="body2">

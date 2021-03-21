@@ -102,7 +102,7 @@ function ResponsiveDrawer() {
                 <ListItemIcon>
                   <SupervisorAccountOutlinedIcon color="secondary" />
                 </ListItemIcon>
-                <ListItemText primary="User Registration" />
+                <ListItemText primary="User Management" />
               </ListItem>
             </Link>
             <Link href="/agent">
@@ -121,9 +121,9 @@ function ResponsiveDrawer() {
                 <ListItemText primary="Agent Management" />
               </ListItem>
             </Link>
-     
+
           </div>
-          
+
         ) : null}
 
         <ListItem button onClick={handleLogout}>

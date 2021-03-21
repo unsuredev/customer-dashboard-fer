@@ -29,7 +29,8 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import CloseIcon from '@material-ui/icons/Close';
 import moment from "moment";
 import jwt_decode from "jwt-decode";
-
+import { BASE_URL } from "../Common/constant";
+import axios from "axios";
 
 import ResponsiveDrawer from "./Drawer";
 
@@ -129,9 +130,9 @@ const Home = () => {
   const [users, setUsers] = React.useState<any[]>([]);
   const [today, setDate] = React.useState(new Date());
   const [open, setOpen] = React.useState(false);
-  const [nameuser , setNameuser ]=React.useState("")
+  const [nameuser, setNameuser] = React.useState("")
 
-  const [userObj , setUserObj] = React.useState({})
+  const [userObj, setUserObj] = React.useState({})
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -149,9 +150,8 @@ const Home = () => {
 
 
   const hour = today.getHours();
-  const wish = `Good ${
-    (hour < 12 && "Morning") || (hour < 17 && "Afternoon") || "Evening"
-  }, `;
+  const wish = `Good ${(hour < 12 && "Morning") || (hour < 17 && "Afternoon") || "Evening"
+    }, `;
   const userGreetings = () => {
     return (
       <div>
@@ -169,13 +169,13 @@ const Home = () => {
   });
 
 
-  const findName=() => {
+  const findName = () => {
     let token: any = localStorage.getItem("access_token");
 
     var decoded = jwt_decode(token);
     //@ts-ignore
     let { name } = decoded;
-    if (name ) {
+    if (name) {
       setNameuser(name)
     }
   }
@@ -184,10 +184,10 @@ const Home = () => {
   const handleChange = (event: any) => {
     setState({ ...state, [event.target.name]: event.target.value });
     //@ts-ignore
-   };
+  };
 
 
-   const [customer, setCustomer] = React.useState({
+  const [customer, setCustomer] = React.useState({
     name: "",
     mainAadhaar: "",
     consumerNo: "",
@@ -219,7 +219,7 @@ const Home = () => {
           return showToast("No result found", "error");
         setUsers([result.data]);
         setCustomer(result.data);
-       
+
       }
       if (state.aadhaar) {
         const result = await httpClient("customer/find", "POST", {
@@ -230,7 +230,7 @@ const Home = () => {
         setUsers([result.data]);
         //@ts-ignore
         setCustomer(result.data);
-       
+
       }
       if (state.consumerNo) {
         const result = await httpClient("customer/find", "POST", {
@@ -240,9 +240,9 @@ const Home = () => {
         if (!result.data && result.data === undefined)
           return showToast("No result found", "error");
         setUsers([result.data]);
-           {/* @ts-ignore */}
+        {/* @ts-ignore */ }
         setCustomer(result.data);
-        console.log("custome==>" , customer)
+        console.log("custome==>", customer)
       }
       if (state.regNo) {
         const result = await httpClient("customer/find", "POST", {
@@ -253,8 +253,8 @@ const Home = () => {
           return showToast("No result found", "error");
         setUsers([result.data]);
         setCustomer(result.data);
-           //@ts-ignore
-       
+        //@ts-ignore
+
       }
     } catch (error) {
       showToast("Something went wrong", "error");
@@ -265,30 +265,27 @@ const Home = () => {
   const handleupdate = async () => {
     setOpen(false);
     try {
-      const result = await httpClient("customer/update", "POST",
-       {
-        data:customer
-      });
-      if (result && result != undefined) {
+      const result = await axios.post(BASE_URL + "customer/update", { data: customer })
+      if (result.data.data && result.data != undefined) {
         showToast("Customer updated successfullly", "success");
-        console.log("updated" ,result)
+        console.log("updated", result)
       }
     } catch (error) {
-      showToast("Something went wrong", "error");
+      if (error) {
+        showToast(error.response.data.message, "error")
+      }
     }
   };
   const handleDelete = async (customer: any) => {
     console.log("customer", customer);
     try {
-      const result = await httpClient("customer/delete", "POST", {
-        customerId: customer._id,
-      });
-      if (result && result != undefined) {
+      const result = await axios.post(BASE_URL + "customer/delete", { customerId: customer._id })
+      if (result.data && result.data != undefined) {
         showToast("Customer deleted successfullly", "success");
-        window.location.reload();      
-        }
+        window.location.reload();
+      }
     } catch (error) {
-      showToast("Something went wrong", "error");
+      showToast(error.response.data.message, "error")
     }
   };
 
@@ -324,23 +321,23 @@ const Home = () => {
       <CssBaseline />
       <ResponsiveDrawer />
 
-      <main style={{marginLeft:"4rem"}}>
+      <main style={{ marginLeft: "4rem" }}>
         <div className={classes.heroContent}>
-          
-          <Container maxWidth="md" component="main">
-            <h2 style={{textAlign:"center"}}>Welcome to Jaman HP Gas</h2>
-          <h2>{userGreetings()} </h2>
 
-<Typography color="secondary" gutterBottom>
-  Find Customer Details
+          <Container maxWidth="md" component="main">
+            <h2 style={{ textAlign: "center" }}>Welcome to Jaman HP Gas</h2>
+            <h2>{userGreetings()} </h2>
+
+            <Typography color="secondary" gutterBottom>
+              Find Customer Details
 </Typography>
-       
+
             <Grid
               container
               className="maincontainer"
               style={{ justifyContent: "center", textAlign: "center" }}
             >
-              
+
               <Grid item xs={12} sm={12} md={3}>
                 <form className={classes.form} noValidate autoComplete="off">
                   <TextField
@@ -354,7 +351,7 @@ const Home = () => {
                     autoFocus
                     value={state.aadhaar}
                     onChange={handleChange}
-                 
+
                   />
                 </form>
               </Grid>
@@ -445,9 +442,9 @@ const Home = () => {
             )}
           </Grid>
           <div>
-    
 
-    </div>
+
+          </div>
           {/* {loading ? <div style={{ display: 'flex', justifyContent: 'center' }}><CircularProgress /> </div> : */}
           <Grid container spacing={4} className="maincontainer">
             {users.map((user, i) => (
@@ -463,7 +460,7 @@ const Home = () => {
                 }}
               >
                 <Card className={classes.card} key={i} >
-                  <CardContent className={classes.cardContent} style={{marginLeft:"2rem"}}>
+                  <CardContent className={classes.cardContent} style={{ marginLeft: "2rem" }}>
                     <Typography color="textSecondary" gutterBottom>
                       Customer's Details
                     </Typography>
@@ -471,16 +468,16 @@ const Home = () => {
                       action={
                         <div>
                           <IconButton aria-label="settings" onClick={handleClickOpen}>
-                            <EditIcon  onClick={handleClickOpen}/>
+                            <EditIcon onClick={handleClickOpen} />
                           </IconButton>
-                          {getUser()?
-                          <IconButton
-                            aria-label="settings"
-                            onClick={() => handleDelete(user)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>:null
-                      }
+                          {getUser() ?
+                            <IconButton
+                              aria-label="settings"
+                              onClick={() => handleDelete(user)}
+                            >
+                              <DeleteIcon />
+                            </IconButton> : null
+                          }
                         </div>
                       }
                       //@ts-ignore
@@ -488,190 +485,190 @@ const Home = () => {
                     />
                     <CardHeader style={{ textAlign: "center" }} />
                     <div >
-               
-                {/* @ts-ignore */}
-                <Typography>Sl No : {user.slNo || "NA"}</Typography>
-                    {/* @ts-ignore */}
-                    <Typography>Name : {user.name}</Typography>
-                 
-                    {/* @ts-ignore */}
-                    <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
+
                       {/* @ts-ignore */}
-                    <Typography>
-                      Family Aadhaar : {user.familyAadhaar}
-                    </Typography>
-                       {/* @ts-ignore */}
-                       <Typography>Mobile No : {user.mobile}</Typography>
-                    {/* @ts-ignore */}
-                    <Typography>
-                      Registration No : {user.regNo || "NA"}
-                    </Typography>
-                    <Typography>
-                      Consumer No :{user.consumerNo || "NA"}{" "}
-                    </Typography>
-                    {/* @ts-ignore */}
-                   
-                    {/* @ts-ignore */}
+                      <Typography>Sl No : {user.slNo || "NA"}</Typography>
+                      {/* @ts-ignore */}
+                      <Typography>Name : {user.name}</Typography>
 
-                    <Typography>Main Agent : {user.mainAgent}</Typography>
-                    {/* @ts-ignore */}
+                      {/* @ts-ignore */}
+                      <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
+                      {/* @ts-ignore */}
+                      <Typography>
+                        Family Aadhaar : {user.familyAadhaar}
+                      </Typography>
+                      {/* @ts-ignore */}
+                      <Typography>Mobile No : {user.mobile}</Typography>
+                      {/* @ts-ignore */}
+                      <Typography>
+                        Registration No : {user.regNo || "NA"}
+                      </Typography>
+                      <Typography>
+                        Consumer No :{user.consumerNo || "NA"}{" "}
+                      </Typography>
+                      {/* @ts-ignore */}
 
-                    <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
-                    <Typography>Remarks : {user.remarks || "NA"}</Typography>
-                        {/* @ts-ignore */}
+                      {/* @ts-ignore */}
 
-                        <Typography>Created On : {user.date || "NA"}</Typography>
-                    
-                    <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
-                    {user.updatedAt!=undefined &&
-                    <Typography variant="subtitle2" gutterBottom color="primary">Updated On: {moment(user.updatedAt).format('LLL') || "NA"}</Typography>
-                    }
-                   
+                      <Typography>Main Agent : {user.mainAgent}</Typography>
+                      {/* @ts-ignore */}
 
-                  </div>
+                      <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
+                      <Typography>Remarks : {user.remarks || "NA"}</Typography>
+                      {/* @ts-ignore */}
+
+                      <Typography>Created On : {user.date || "NA"}</Typography>
+
+                      <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
+                      {user.updatedAt != undefined &&
+                        <Typography variant="subtitle2" gutterBottom color="primary">Updated On: {moment(user.updatedAt).format('LLL') || "NA"}</Typography>
+                      }
+
+
+                    </div>
                   </CardContent>
                   <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Update Customer Data :
+                    <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                      Update Customer Data :
         </DialogTitle>
-        <DialogContent dividers>
-        {users.map((user, i) => (
-          <Grid container>
-            
-       
-          <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
-          <TextField
-                    id="outlined-basic"
-                    label="Name"
-                    name="name"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.name}
-                    onChange={handleChangeUser}
-                  />
-                
+                    <DialogContent dividers>
+                      {users.map((user, i) => (
+                        <Grid container>
 
-          </Grid>
-      
 
-          <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
-            <TextField
-                    id="outlined-basic"
-                    label="Mobile"
-                    name="mobile"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.mobile}
-                    onChange={handleChangeUser}
-                  />
-                  </Grid>
-                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                            <TextField
+                              id="outlined-basic"
+                              label="Name"
+                              name="name"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.name}
+                              onChange={handleChangeUser}
+                            />
 
-         <TextField
-                    id="outlined-basic"
-                    label="Main Aadhaar"
-                    name="mainAadhaar"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.mainAadhaar}
-                    onChange={handleChangeUser}
-                  />
-                  </Grid>
-                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
 
-                        <TextField
-                    id="outlined-basic"
-                    label="Family Aadhaar"
-                    name="familyAadhaar"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.familyAadhaar}
-                    onChange={handleChangeUser}
-                  />
-                  </Grid>
-                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+                          </Grid>
 
-                  {customer.regNo &&
-                                  <TextField
-                    id="outlined-basic"
-                    label="Reg No"
-                    name="regNo"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.regNo}
-                    onChange={handleChangeUser}
-                  />
-}
-</Grid>
-<Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
 
-                  {customer.consumerNo &&
-                                  <TextField
-                    id="outlined-basic"
-                    label="Consumer No"
-                    name="consumerNo"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.consumerNo}
-                    onChange={handleChangeUser}
-                  />
-}
-</Grid>
-<Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                            <TextField
+                              id="outlined-basic"
+                              label="Mobile"
+                              name="mobile"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.mobile}
+                              onChange={handleChangeUser}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                                             <TextField
-                    id="outlined-basic"
-                    label="Main Agent"
-                    name="mainAgent"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.mainAgent}
-                    onChange={handleChangeUser}
-                  />
-                  </Grid>
-                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+                            <TextField
+                              id="outlined-basic"
+                              label="Main Aadhaar"
+                              name="mainAadhaar"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.mainAadhaar}
+                              onChange={handleChangeUser}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                                             <TextField
-                    id="outlined-basic"
-                    label="Sub Agent"
-                    name="subAgent"
-                    variant="outlined"
-                    fullWidth
-                    type="text"
-                    value={customer.subAgent}
-                    onChange={handleChangeUser}
-                  />
-                  </Grid>
-                  <Grid  item xs={12} sm={12} md={12} style={{margin:"5px"}}>
+                            <TextField
+                              id="outlined-basic"
+                              label="Family Aadhaar"
+                              name="familyAadhaar"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.familyAadhaar}
+                              onChange={handleChangeUser}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-<TextField
-id="outlined-basic"
-label="Remarks"
-name="remarks"
-variant="outlined"
-fullWidth
-type="text"
-value={customer.remarks}
-onChange={handleChangeUser}
-/>
-</Grid>
-                  </Grid>
-        ))
-}
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleupdate} color="primary"   >
-            Save & Update
+                            {customer.regNo &&
+                              <TextField
+                                id="outlined-basic"
+                                label="Reg No"
+                                name="regNo"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.regNo}
+                                onChange={handleChangeUser}
+                              />
+                            }
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                            {customer.consumerNo &&
+                              <TextField
+                                id="outlined-basic"
+                                label="Consumer No"
+                                name="consumerNo"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.consumerNo}
+                                onChange={handleChangeUser}
+                              />
+                            }
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                            <TextField
+                              id="outlined-basic"
+                              label="Main Agent"
+                              name="mainAgent"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.mainAgent}
+                              onChange={handleChangeUser}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                            <TextField
+                              id="outlined-basic"
+                              label="Sub Agent"
+                              name="subAgent"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.subAgent}
+                              onChange={handleChangeUser}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                            <TextField
+                              id="outlined-basic"
+                              label="Remarks"
+                              name="remarks"
+                              variant="outlined"
+                              fullWidth
+                              type="text"
+                              value={customer.remarks}
+                              onChange={handleChangeUser}
+                            />
+                          </Grid>
+                        </Grid>
+                      ))
+                      }
+                    </DialogContent>
+                    <DialogActions>
+                      <Button autoFocus onClick={handleupdate} color="primary"   >
+                        Save & Update
           </Button>
-        </DialogActions>
-      </Dialog>
+                    </DialogActions>
+                  </Dialog>
                 </Card>
               </Grid>
             ))}

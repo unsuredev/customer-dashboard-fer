@@ -6,7 +6,7 @@ import {
   makeStyles,
   Container,
   CssBaseline,
-  TextField,Typography
+  TextField, Typography
 } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -17,6 +17,8 @@ import FooterSection from "../Components/Footer";
 import jwt_decode from "jwt-decode";
 
 import ResponsiveDrawer from "./Drawer";
+import { BASE_URL } from "../Common/constant";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -85,8 +87,8 @@ const Customer = () => {
     //@ts-ignore
     let { name } = decoded;
     if (name && name != undefined) {
-      if(name){
-      customer.addedBy = name;
+      if (name) {
+        customer.addedBy = name;
       }
     }
   });
@@ -112,13 +114,15 @@ const Customer = () => {
   const handleRegister = async (e: any) => {
     try {
       e.preventDefault();
-      const result = await httpClient("customer/add", "POST", customer);
-      if (result.data && result.data != null) {
-        setLastUser(result.data.result);
-        showToast("user added susccesssfully", "success");
+      const result = await axios.post(BASE_URL + "customer/add", customer)
+      if (result.data.data && result.data != null) {
+        setLastUser(result.data.data.result);
+        showToast("Consumer added susccesssfully", "success");
       }
     } catch (error) {
-      showToast(error.message, "error");
+      if (error) {
+        showToast(error.response.data.message, "error")
+      }
     }
   };
 
@@ -135,7 +139,7 @@ const Customer = () => {
     <React.Fragment>
       <CssBaseline />
       <ResponsiveDrawer />
-      <Container maxWidth="md" style={{ display: "flex" , marginLeft:"15rem"}}>
+      <Container maxWidth="md" style={{ display: "flex", marginLeft: "15rem" }}>
         <Grid container>
           <Grid item xs={12} sm={12} md={6}>
             <div>
@@ -169,10 +173,10 @@ const Customer = () => {
                       onChange={handleChange}
                       value={customer.mainAadhaar}
                       inputProps={{ maxLength: 12 }}
-                      onInput = {(e) =>{
+                      onInput={(e) => {
                         //@ts-ignore
-                        e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,12)
-                    }}
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 12)
+                      }}
 
                     />
                   </Grid>
@@ -190,10 +194,10 @@ const Customer = () => {
                       onChange={handleChange}
                       value={customer.familyAadhaar}
                       inputProps={{ maxLength: 12 }}
-                      onInput = {(e) =>{
+                      onInput={(e) => {
                         //@ts-ignore
-                        e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,12)
-                    }}
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 12)
+                      }}
 
                     />
                   </Grid>
@@ -209,10 +213,10 @@ const Customer = () => {
                       autoComplete="current-mobile"
                       onChange={handleChange}
                       value={customer.mobile}
-                      onInput = {(e) =>{
+                      onInput={(e) => {
                         //@ts-ignore
-                        e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10)
-                    }}
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
+                      }}
 
                     />
                   </Grid>
@@ -241,13 +245,13 @@ const Customer = () => {
                       autoComplete="consumerNo"
                       onChange={handleChange}
                       value={customer.consumerNo}
-                      onInput = {(e) =>{
+                      onInput={(e) => {
                         //@ts-ignore
-                        e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,6)
-                    }}
+                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 6)
+                      }}
                     />
                   </Grid>
-  
+
                   {/* <Grid item xs={12}>
                     <FormControl
                       variant="outlined"
@@ -336,32 +340,32 @@ const Customer = () => {
                 }}
               >
 
-<h2>Last saved registration's details</h2>
+                <h2>Last saved registration's details</h2>
                 {/* @ts-ignore */}
                 <Typography>Name : {lastUser.name}</Typography>
                 <Typography variant="subtitle2" gutterBottom>
-                      {/* @ts-ignore */}
-                Main Aadhaar :{lastUser.mainAadhaar}
-           </Typography>
-             {/* @ts-ignore */}
-             <Typography> Family Aadhaar :{lastUser.familyAadhaar}</Typography>
-                 {/* @ts-ignore */}
-                 <Typography> Mobile: {lastUser.mobile}</Typography>
-                {/* @ts-ignore */}
-             
-          
-           <Typography variant="subtitle2" gutterBottom>
-                      {/* @ts-ignore */}
-                Registration No :{lastUser.regNo}
-           </Typography>
-               {/* @ts-ignore */}
-               <Typography> Consumer No :{lastUser.consumerNo}</Typography>
-            {/* @ts-ignore */}
-                <Typography> Main Agent :{lastUser.mainAgent}</Typography>
-                 {/* @ts-ignore */}
-                 <Typography> Sub Agent :{lastUser.subAgent}</Typography>
                   {/* @ts-ignore */}
-                  <Typography> Remarks  :{lastUser.remarks}</Typography>
+                Main Aadhaar :{lastUser.mainAadhaar}
+                </Typography>
+                {/* @ts-ignore */}
+                <Typography> Family Aadhaar :{lastUser.familyAadhaar}</Typography>
+                {/* @ts-ignore */}
+                <Typography> Mobile: {lastUser.mobile}</Typography>
+                {/* @ts-ignore */}
+
+
+                <Typography variant="subtitle2" gutterBottom>
+                  {/* @ts-ignore */}
+                Registration No :{lastUser.regNo}
+                </Typography>
+                {/* @ts-ignore */}
+                <Typography> Consumer No :{lastUser.consumerNo}</Typography>
+                {/* @ts-ignore */}
+                <Typography> Main Agent :{lastUser.mainAgent}</Typography>
+                {/* @ts-ignore */}
+                <Typography> Sub Agent :{lastUser.subAgent}</Typography>
+                {/* @ts-ignore */}
+                <Typography> Remarks  :{lastUser.remarks}</Typography>
               </div>
             </Card>
           </Grid>
