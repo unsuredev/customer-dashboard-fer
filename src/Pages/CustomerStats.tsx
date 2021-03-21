@@ -11,13 +11,13 @@ import { useTheme } from '@material-ui/core/styles';
 import MaterialTable from 'material-table';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory } from "react-router-dom";
-import ResponsiveDrawer  from './Drawer';
+import ResponsiveDrawer from './Drawer';
 import FooterSection from '../Components/Footer'
 
 import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker,
+    KeyboardDatePicker,
 } from '@material-ui/pickers';
 
 
@@ -87,14 +87,14 @@ const CustomerStats = () => {
     const startDateChange = (date: any) => {
         const format = "YYYY-MM-DD"
         let startday: any = moment(date).format(format)
-        console.log("startdate" , startday)
+        console.log("startdate", startday)
         setFirstDate(startday);
     };
     const endDateChange = (date2: any) => {
         const format = "YYYY-MM-DD"
         let endday: any = moment(date2).format(format);
         setLastDate(endday);
-        console.log("end" , endday)
+        console.log("end", endday)
 
     };
     const fetchUsers = async () => {
@@ -125,7 +125,7 @@ const CustomerStats = () => {
             }
         }
         setUserlist(userlist)
-        console.log("users data" , userlist)
+        console.log("users data", userlist)
         setLoading(false);
         return userlist
 
@@ -136,11 +136,11 @@ const CustomerStats = () => {
 
     return (
         <React.Fragment>
-            <ResponsiveDrawer/>
-            <div style={{marginLeft:"10rem"}} >
-       
+            <ResponsiveDrawer />
+            <Container maxWidth="md" style={{ paddingLeft: "4rem" }} >
 
-                <Grid container>
+
+                <Grid container >
 
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Grid container justify="space-around">
@@ -177,97 +177,97 @@ const CustomerStats = () => {
                                 FIND
                     </Button>
                         </Grid>
-                       
+
                     </MuiPickersUtilsProvider>
                 </Grid>
-            </div>
-            < Container >
-
-<Grid container style={{marginTop:"50px"}}>
-    <br></br>
-    <Table size="small">
-        <TableHead>
-            <TableRow>
-                <TableCell>Sl No.</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>No of Customer</TableCell>
-
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {users.map((row, i) => (
-                <TableRow key={i}>
-                    <TableCell>{i + 1}</TableCell>
-                    <TableCell>{row.join_date}</TableCell>
-                    <TableCell>{row.customers.length}</TableCell>
-                    <TableCell>
-                        <Link color="primary" onClick={() => usersByDate(i)}>
-                            < ExpandMoreIcon />
-                        </Link></TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
-    </Table>
-</Grid>
-
-</Container>
-
-<Container style={{margin:"auto" , justifyContent:"center" , textAlign:"center"}}>
-
-
-
-            <div style={{marginTop:"50px" , justifyContent:"center" , alignItems:"center" ,textAlign:"center", width:"100%"}}>
-
-       { userlist.length > 0 && (
-             
-                    <Grid container >
-                               <Grid item  xs={12} sm={12} md={12} >
-                        <MaterialTable
-                            title="Jaman Hp Gas Customers"
-                            isLoading={loading}
-                            columns={[
-                                {title:"Sl No", field:'tableData.id'},
-                                { title: 'Name', field: 'name' },
-                                { title: 'Mobile', field: 'mobile' || "null" },
-                                {title:'Main Aadhaar' , field:'mainAadhaar' },
-                                {title:'Family Aadhaar' , field:'familyAadhaar' },
-                                {title:'Reg No' , field:'regNo' },
-                                {title:'Consumer No', field:'ConsumerNO'},
-                                {title:'Main Agent', field:'mainAgent'},
-                                {title:'Sub Agent' , field:'subAgent'},
-                                {title:"Remarks", field:"remarks"}
-                          
-
-                            ]}
-
-                            data={userlist}
-                            options={{
-                                exportButton: true,
-                                exportAllData: true ,
-                                filtering: true,
-                                sorting: true,
-                                pageSizeOptions: [5, 20, 50, 100, 200, 500],
-                                headerStyle: {
-                                    backgroundColor: '#01579b',
-                                    color: '#FFF'
-                                  }
-
-
-                            }}
-                        />
-                    </Grid>
-                    </Grid>
-                  
-    
-                )}
-            </div> 
-            
             </Container>
-            <FooterSection/>
+            < Container maxWidth="md" style={{ marginTop: "50px", marginRight: "5rem" }}>
+
+                <Grid container >
+                    <br></br>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Sl No.</TableCell>
+                                <TableCell>Date</TableCell>
+                                <TableCell>No of Customer</TableCell>
+
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {users.map((row, i) => (
+                                <TableRow key={i}>
+                                    <TableCell>{i + 1}</TableCell>
+                                    <TableCell>{row.join_date}</TableCell>
+                                    <TableCell>{row.customers.length}</TableCell>
+                                    <TableCell>
+                                        <Link color="primary" onClick={() => usersByDate(i)}>
+                                            < ExpandMoreIcon />
+                                        </Link></TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Grid>
+
+            </Container>
+
+            <Container style={{ margin: "auto", justifyContent: "center", textAlign: "center" }}>
 
 
 
-        </React.Fragment>
+                <div style={{ marginTop: "50px", justifyContent: "center", alignItems: "center", textAlign: "center", width: "100%" }}>
+
+                    {userlist.length > 0 && (
+
+                        <Grid container >
+                            <Grid item xs={12} sm={12} md={12} style={{ marginLeft: "11rem" }}>
+                                <MaterialTable
+                                    title="Jaman Hp Gas Customers"
+                                    isLoading={loading}
+                                    columns={[
+                                        { title: "Sl No", field: 'tableData.id' },
+                                        { title: 'Name', field: 'name' },
+                                        { title: 'Main Aadhaar', field: 'mainAadhaar' },
+                                        { title: 'Family Aadhaar', field: 'familyAadhaar' },
+                                        { title: 'Mobile', field: 'mobile' || "null" },
+                                        { title: 'Reg No', field: 'regNo' || "NA" },
+                                        { title: 'Consumer No', field: 'ConsumerNO' },
+                                        { title: 'Main Agent', field: 'mainAgent' },
+                                        { title: 'Sub Agent', field: 'subAgent' || "NA" },
+                                        { title: "Remarks", field: "remarks" }
+
+
+                                    ]}
+
+                                    data={userlist}
+                                    options={{
+                                        exportButton: true,
+                                        exportAllData: true,
+                                        filtering: true,
+                                        sorting: true,
+                                        pageSizeOptions: [5, 20, 50, 100, 200, 500],
+                                        headerStyle: {
+                                            backgroundColor: '#01579b',
+                                            color: '#FFF'
+                                        }
+
+
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+
+
+                    )}
+                </div>
+
+            </Container>
+            <FooterSection />
+
+
+
+        </React.Fragment >
     );
 }
 export default CustomerStats

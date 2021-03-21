@@ -49,13 +49,11 @@ const useStyles = makeStyles((theme) => ({
   },
   heroContent: {
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
   },
   heroButtons: {
     marginTop: theme.spacing(4),
   },
   cardGrid: {
-    paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
   card: {
@@ -154,9 +152,9 @@ const Home = () => {
     }, `;
   const userGreetings = () => {
     return (
-      <div>
-        <h2>{wish}{nameuser}</h2>
-      </div>
+
+      <h2 style={{ textAlign: "center" }}>{wish}{nameuser}</h2>
+
     );
   };
 
@@ -321,21 +319,21 @@ const Home = () => {
       <CssBaseline />
       <ResponsiveDrawer />
 
-      <main style={{ marginLeft: "4rem" }}>
+
+      <div >
+
         <div className={classes.heroContent}>
 
-          <Container maxWidth="md" component="main">
-            <h2 style={{ textAlign: "center" }}>Welcome to Jaman HP Gas</h2>
-            <h2>{userGreetings()} </h2>
 
-            <Typography color="secondary" gutterBottom>
-              Find Customer Details
-</Typography>
+          <Container maxWidth="md" component="main" style={{ marginTop: "-60px", paddingTop: "-10px" }}>
+            {userGreetings()}
+
+
 
             <Grid
               container
               className="maincontainer"
-              style={{ justifyContent: "center", textAlign: "center" }}
+              style={{ justifyContent: "center", textAlign: "center", marginTop: "-10px", marginLeft: "4rem" }}
             >
 
               <Grid item xs={12} sm={12} md={3}>
@@ -438,14 +436,9 @@ const Home = () => {
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid className="maincontainer" style={{ textAlign: "center" }}>
             {users.length === 0 && (
-              <h2>Your Customer data will display here!...........</h2>
+              <h2 style={{ margin: "auto", }}>Your Customer data will display here!...........</h2>
             )}
           </Grid>
-          <div>
-
-
-          </div>
-          {/* {loading ? <div style={{ display: 'flex', justifyContent: 'center' }}><CircularProgress /> </div> : */}
           <Grid container spacing={4} className="maincontainer">
             {users.map((user, i) => (
               <Grid
@@ -459,222 +452,223 @@ const Home = () => {
                   textAlign: "left",
                 }}
               >
-                <Card className={classes.card} key={i} >
-                  <CardContent className={classes.cardContent} style={{ marginLeft: "2rem" }}>
-                    <Typography color="textSecondary" gutterBottom>
-                      Customer's Details
+                <Grid item xs={12} sm={12} md={12} style={{ marginTop: "-40PX" }}>
+                  <Card className={classes.card} key={i} >
+                    <CardContent className={classes.cardContent} style={{ marginLeft: "2rem" }}>
+                      <Typography color="textSecondary" gutterBottom>
+                        Customer's Details
                     </Typography>
-                    <CardHeader
-                      action={
-                        <div>
-                          <IconButton aria-label="settings" onClick={handleClickOpen}>
-                            <EditIcon onClick={handleClickOpen} />
-                          </IconButton>
-                          {getUser() ?
-                            <IconButton
-                              aria-label="settings"
-                              onClick={() => handleDelete(user)}
-                            >
-                              <DeleteIcon />
-                            </IconButton> : null
-                          }
-                        </div>
-                      }
-                      //@ts-ignore
-                      title={user.name}
-                    />
-                    <CardHeader style={{ textAlign: "center" }} />
-                    <div >
+                      <CardHeader
+                        action={
+                          <div style={{ margin: "0px", padding: "0px" }}>
+                            <IconButton aria-label="settings" onClick={handleClickOpen}>
+                              <EditIcon onClick={handleClickOpen} />
+                            </IconButton>
+                            {getUser() ?
+                              <IconButton
+                                aria-label="settings"
+                                onClick={() => handleDelete(user)}
+                              >
+                                <DeleteIcon />
+                              </IconButton> : null
+                            }
+                          </div>
+                        }
+                        //@ts-ignore
+                        title={user.name}
+                      />
+                      <CardHeader style={{ textAlign: "center" }} />
+                      <div style={{ marginTop: "-40px" }}>
+                        {/* @ts-ignore */}
+                        <Typography>Sl No : {user.slNo || "NA"}</Typography>
+                        {/* @ts-ignore */}
+                        <Typography>Name : {user.name}</Typography>
 
-                      {/* @ts-ignore */}
-                      <Typography>Sl No : {user.slNo || "NA"}</Typography>
-                      {/* @ts-ignore */}
-                      <Typography>Name : {user.name}</Typography>
+                        {/* @ts-ignore */}
+                        <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
+                        {/* @ts-ignore */}
+                        <Typography>
+                          Family Aadhaar : {user.familyAadhaar}
+                        </Typography>
+                        {/* @ts-ignore */}
+                        <Typography>Mobile No : {user.mobile}</Typography>
+                        {/* @ts-ignore */}
+                        <Typography>
+                          Registration No : {user.regNo || "NA"}
+                        </Typography>
+                        <Typography>
+                          Consumer No :{user.consumerNo || "NA"}{" "}
+                        </Typography>
+                        {/* @ts-ignore */}
 
-                      {/* @ts-ignore */}
-                      <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
-                      {/* @ts-ignore */}
-                      <Typography>
-                        Family Aadhaar : {user.familyAadhaar}
-                      </Typography>
-                      {/* @ts-ignore */}
-                      <Typography>Mobile No : {user.mobile}</Typography>
-                      {/* @ts-ignore */}
-                      <Typography>
-                        Registration No : {user.regNo || "NA"}
-                      </Typography>
-                      <Typography>
-                        Consumer No :{user.consumerNo || "NA"}{" "}
-                      </Typography>
-                      {/* @ts-ignore */}
+                        {/* @ts-ignore */}
 
-                      {/* @ts-ignore */}
+                        <Typography>Main Agent : {user.mainAgent}</Typography>
+                        {/* @ts-ignore */}
 
-                      <Typography>Main Agent : {user.mainAgent}</Typography>
-                      {/* @ts-ignore */}
+                        <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
+                        <Typography>Remarks : {user.remarks || "NA"}</Typography>
+                        {/* @ts-ignore */}
 
-                      <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
-                      <Typography>Remarks : {user.remarks || "NA"}</Typography>
-                      {/* @ts-ignore */}
+                        <Typography>Created On : {user.date || "NA"}</Typography>
 
-                      <Typography>Created On : {user.date || "NA"}</Typography>
-
-                      <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
-                      {user.updatedAt != undefined &&
-                        <Typography variant="subtitle2" gutterBottom color="primary">Updated On: {moment(user.updatedAt).format('LLL') || "NA"}</Typography>
-                      }
+                        <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
+                        {user.updatedAt != undefined &&
+                          <Typography variant="subtitle2" gutterBottom color="primary">Updated On: {moment(user.updatedAt).format('LLL') || "NA"}</Typography>
+                        }
 
 
-                    </div>
-                  </CardContent>
-                  <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-                    <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                      Update Customer Data :
+                      </div>
+                    </CardContent>
+                    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                      <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+                        Update Customer Data :
         </DialogTitle>
-                    <DialogContent dividers>
-                      {users.map((user, i) => (
-                        <Grid container>
+                      <DialogContent dividers>
+                        {users.map((user, i) => (
+                          <Grid container>
 
 
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-                            <TextField
-                              id="outlined-basic"
-                              label="Name"
-                              name="name"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.name}
-                              onChange={handleChangeUser}
-                            />
-
-
-                          </Grid>
-
-
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-                            <TextField
-                              id="outlined-basic"
-                              label="Mobile"
-                              name="mobile"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.mobile}
-                              onChange={handleChangeUser}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
-                            <TextField
-                              id="outlined-basic"
-                              label="Main Aadhaar"
-                              name="mainAadhaar"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.mainAadhaar}
-                              onChange={handleChangeUser}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
-                            <TextField
-                              id="outlined-basic"
-                              label="Family Aadhaar"
-                              name="familyAadhaar"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.familyAadhaar}
-                              onChange={handleChangeUser}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
-                            {customer.regNo &&
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
                               <TextField
                                 id="outlined-basic"
-                                label="Reg No"
-                                name="regNo"
+                                label="Name"
+                                name="name"
                                 variant="outlined"
                                 fullWidth
                                 type="text"
-                                value={customer.regNo}
+                                value={customer.name}
                                 onChange={handleChangeUser}
                               />
-                            }
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                            {customer.consumerNo &&
+
+                            </Grid>
+
+
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
                               <TextField
                                 id="outlined-basic"
-                                label="Consumer No"
-                                name="consumerNo"
+                                label="Mobile"
+                                name="mobile"
                                 variant="outlined"
                                 fullWidth
                                 type="text"
-                                value={customer.consumerNo}
+                                value={customer.mobile}
                                 onChange={handleChangeUser}
                               />
-                            }
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                            <TextField
-                              id="outlined-basic"
-                              label="Main Agent"
-                              name="mainAgent"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.mainAgent}
-                              onChange={handleChangeUser}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                              <TextField
+                                id="outlined-basic"
+                                label="Main Aadhaar"
+                                name="mainAadhaar"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.mainAadhaar}
+                                onChange={handleChangeUser}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                            <TextField
-                              id="outlined-basic"
-                              label="Sub Agent"
-                              name="subAgent"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.subAgent}
-                              onChange={handleChangeUser}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                              <TextField
+                                id="outlined-basic"
+                                label="Family Aadhaar"
+                                name="familyAadhaar"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.familyAadhaar}
+                                onChange={handleChangeUser}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                            <TextField
-                              id="outlined-basic"
-                              label="Remarks"
-                              name="remarks"
-                              variant="outlined"
-                              fullWidth
-                              type="text"
-                              value={customer.remarks}
-                              onChange={handleChangeUser}
-                            />
+                              {customer.regNo &&
+                                <TextField
+                                  id="outlined-basic"
+                                  label="Reg No"
+                                  name="regNo"
+                                  variant="outlined"
+                                  fullWidth
+                                  type="text"
+                                  value={customer.regNo}
+                                  onChange={handleChangeUser}
+                                />
+                              }
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                              {customer.consumerNo &&
+                                <TextField
+                                  id="outlined-basic"
+                                  label="Consumer No"
+                                  name="consumerNo"
+                                  variant="outlined"
+                                  fullWidth
+                                  type="text"
+                                  value={customer.consumerNo}
+                                  onChange={handleChangeUser}
+                                />
+                              }
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                              <TextField
+                                id="outlined-basic"
+                                label="Main Agent"
+                                name="mainAgent"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.mainAgent}
+                                onChange={handleChangeUser}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                              <TextField
+                                id="outlined-basic"
+                                label="Sub Agent"
+                                name="subAgent"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.subAgent}
+                                onChange={handleChangeUser}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+
+                              <TextField
+                                id="outlined-basic"
+                                label="Remarks"
+                                name="remarks"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.remarks}
+                                onChange={handleChangeUser}
+                              />
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      ))
-                      }
-                    </DialogContent>
-                    <DialogActions>
-                      <Button autoFocus onClick={handleupdate} color="primary"   >
-                        Save & Update
+                        ))
+                        }
+                      </DialogContent>
+                      <DialogActions>
+                        <Button autoFocus onClick={handleupdate} color="primary"   >
+                          Save & Update
           </Button>
-                    </DialogActions>
-                  </Dialog>
-                </Card>
+                      </DialogActions>
+                    </Dialog>
+                  </Card>
+                </Grid>
               </Grid>
             ))}
           </Grid>
         </Container>
-      </main>
+      </div>
       {/* Footer */}
 
       <FooterSection />

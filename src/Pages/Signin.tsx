@@ -93,8 +93,7 @@ const SignIn = () => {
 
       }
     } catch (error) {
-      if (error) {
-
+      if (error.response) {
         showToast(error.response.data.message, "error")
 
       }
