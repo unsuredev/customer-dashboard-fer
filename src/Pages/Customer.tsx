@@ -79,6 +79,8 @@ const Customer = () => {
   const { showToast } = React.useContext(ToastContext);
   const [lastUser, setLastUser] = React.useState({});
   const [agentList, setAgetList] = React.useState("");
+  const CHARACTER_LIMIT = 12;
+
 
   React.useEffect(() => {
     let token: any = localStorage.getItem("access_token");
@@ -166,16 +168,14 @@ const Customer = () => {
                       required
                       fullWidth
                       id="mainAadhaar"
-                      type="number"
+                      type="text"
                       label="Main Aadhaar"
                       name="mainAadhaar"
                       autoComplete="mainAadhaar"
                       onChange={handleChange}
                       value={customer.mainAadhaar}
-                      inputProps={{ maxLength: 12 }}
-                      onInput={(e) => {
-                        //@ts-ignore
-                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 12)
+                      inputProps={{
+                        maxlength: CHARACTER_LIMIT
                       }}
 
                     />
@@ -187,18 +187,14 @@ const Customer = () => {
                       required
                       fullWidth
                       id="faadhaar"
-                      type="number"
-                      label="Family Adhaar"
+                      type="text" label="Family Adhaar"
                       name="familyAadhaar"
                       autoComplete="faadhaar"
                       onChange={handleChange}
                       value={customer.familyAadhaar}
-                      inputProps={{ maxLength: 12 }}
-                      onInput={(e) => {
-                        //@ts-ignore
-                        e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 12)
+                      inputProps={{
+                        maxlength: CHARACTER_LIMIT
                       }}
-
                     />
                   </Grid>
                   <Grid item xs={12}>

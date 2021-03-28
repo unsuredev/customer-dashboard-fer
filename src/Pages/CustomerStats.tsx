@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from '@material-ui/core/Table';
-import { Button, Link, Container, TableRow, TableContainer, TableHead, TableBody, TableCell, Grid, makeStyles, } from '@material-ui/core';
+import { Button, Link, TextField, Container, TableRow, TableContainer, TableHead, TableBody, TableCell, Grid, makeStyles, } from '@material-ui/core';
 
 import { httpClient } from "../Common/Service";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -54,10 +54,18 @@ const CustomerStats = () => {
     const [loading, setLoading] = useState(true);
     const [value, setValue] = React.useState(1);
 
+    const [agentName, setAgentName] = React.useState({
+        name: "",
+    });
     let history = useHistory();
 
 
 
+
+    const handleChange = (event: any) => {
+        setAgentName({ ...agentName, [event.target.name]: event.target.value });
+        //@ts-ignore
+    };
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -80,9 +88,9 @@ const CustomerStats = () => {
     };
 
 
-    React.useEffect(() => {
-        fetchUsers()
-    }, []);
+    // React.useEffect(() => {
+    //     fetchUsers()
+    // }, []);
 
     const startDateChange = (date: any) => {
         const format = "YYYY-MM-DD"
@@ -115,6 +123,26 @@ const CustomerStats = () => {
     }
 
 
+    const fetchUsersByAgent = async () => {
+
+        try {
+            //@ts-ignore
+            const result = await httpClient("customer/customerbyagent", "POST", {
+                "mainAgent": agentName.name
+            });
+            setUsers(result.data);
+            console.log("data-===>", result.data)
+            setLoading(false)
+
+
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+
+
     const usersByDate = (index: any) => {
         setLoading(true);
 
@@ -137,10 +165,35 @@ const CustomerStats = () => {
     return (
         <React.Fragment>
             <ResponsiveDrawer />
+            <Container maxWidth="xs" style={{ display: "flex" }}>
+
+                <Grid item xs={12} sm={12} md={8}>
+                    <TextField
+                        variant="outlined"
+
+                        name="name"
+                        label="Consumers list by Agent"
+                        type="text"
+                        id="name"
+                        autoComplete="name"
+                        onChange={handleChange}
+                        value={agentName.name}
+                    />
+                </Grid>
+                <Button variant="contained" color="primary" onClick={fetchUsersByAgent} >
+                    FIND  BY AGENT
+                    </Button>
+
+
+            </Container>
+
+            <br></br>
+
             <Container maxWidth="md" style={{ paddingLeft: "4rem" }} >
 
 
                 <Grid container >
+
 
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Grid container justify="space-around">
@@ -174,7 +227,7 @@ const CustomerStats = () => {
                                 }}
                             />
                             <Button variant="contained" color="primary" onClick={fetchUsers} >
-                                FIND
+                                FIND by DATE
                     </Button>
                         </Grid>
 
