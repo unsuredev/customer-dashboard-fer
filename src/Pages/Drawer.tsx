@@ -105,14 +105,7 @@ function ResponsiveDrawer() {
                 <ListItemText primary="User Management" />
               </ListItem>
             </Link>
-            <Link href="/agent">
-              <ListItem button>
-                <ListItemIcon>
-                  <GroupAddIcon color="secondary" />
-                </ListItemIcon>
-                <ListItemText primary="Agent Registration" />
-              </ListItem>
-            </Link>
+
             <Link href="/agentlist">
               <ListItem button>
                 <ListItemIcon>

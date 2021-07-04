@@ -88,9 +88,9 @@ const CustomerStats = () => {
     };
 
 
-    // React.useEffect(() => {
-    //     fetchUsers()
-    // }, []);
+    React.useEffect(() => {
+        fetchUsers()
+    }, []);
 
     const startDateChange = (date: any) => {
         const format = "YYYY-MM-DD"
@@ -108,6 +108,7 @@ const CustomerStats = () => {
     const fetchUsers = async () => {
 
         try {
+            setLoading(true)
             //@ts-ignore
             const result = await httpClient("customer/getCustomerStats", "POST", {
                 "start_date": firstDate, "end_date": lastDate,
@@ -126,12 +127,12 @@ const CustomerStats = () => {
     const fetchUsersByAgent = async () => {
 
         try {
+            setLoading(true)
             //@ts-ignore
             const result = await httpClient("customer/customerbyagent", "POST", {
                 "mainAgent": agentName.name
             });
             setUsers(result.data);
-            console.log("data-===>", result.data)
             setLoading(false)
 
 
@@ -182,7 +183,7 @@ const CustomerStats = () => {
                 </Grid>
                 <Button variant="contained" color="primary" onClick={fetchUsersByAgent} >
                     FIND  BY AGENT
-                    </Button>
+                </Button>
 
 
             </Container>
@@ -228,7 +229,7 @@ const CustomerStats = () => {
                             />
                             <Button variant="contained" color="primary" onClick={fetchUsers} >
                                 FIND by DATE
-                    </Button>
+                            </Button>
                         </Grid>
 
                     </MuiPickersUtilsProvider>
@@ -264,58 +265,59 @@ const CustomerStats = () => {
                 </Grid>
 
             </Container>
+            {loading ? <div style={{ paddingTop: "30px", justifyContent: "center", alignItems: "center", textAlign: "center", width: "100%" }}><p>This may take few mins...</p> <CircularProgress /> </div> :
 
-            <Container style={{ margin: "auto", justifyContent: "center", textAlign: "center" }}>
-
-
-
-                <div style={{ marginTop: "50px", justifyContent: "center", alignItems: "center", textAlign: "center", width: "100%" }}>
-
-                    {userlist.length > 0 && (
-
-                        <Grid container >
-                            <Grid item xs={12} sm={12} md={12} style={{ marginLeft: "11rem" }}>
-                                <MaterialTable
-                                    title="Jaman Hp Gas Customers"
-                                    isLoading={loading}
-                                    columns={[
-                                        { title: "Sl No", field: 'tableData.id' },
-                                        { title: 'Name', field: 'name' },
-                                        { title: 'Main Aadhaar', field: 'mainAadhaar' },
-                                        { title: 'Family Aadhaar', field: 'familyAadhaar' },
-                                        { title: 'Mobile', field: 'mobile' || "null" },
-                                        { title: 'Reg No', field: 'regNo' || "NA" },
-                                        { title: 'Consumer No', field: 'ConsumerNO' },
-                                        { title: 'Main Agent', field: 'mainAgent' },
-                                        { title: 'Sub Agent', field: 'subAgent' || "NA" },
-                                        { title: "Remarks", field: "remarks" }
+                <Container style={{ margin: "auto", justifyContent: "center", textAlign: "center" }}>
 
 
-                                    ]}
 
-                                    data={userlist}
-                                    options={{
-                                        exportButton: true,
-                                        exportAllData: true,
-                                        filtering: true,
-                                        sorting: true,
-                                        pageSizeOptions: [5, 20, 50, 100, 200, 500],
-                                        headerStyle: {
-                                            backgroundColor: '#01579b',
-                                            color: '#FFF'
-                                        }
+                    <div style={{ marginTop: "50px", justifyContent: "center", alignItems: "center", textAlign: "center", width: "100%" }}>
+
+                        {userlist.length > 0 && (
+
+                            <Grid container >
+                                <Grid item xs={12} sm={12} md={12} style={{ marginLeft: "11rem" }}>
+                                    <MaterialTable
+                                        title="Jaman Hp Gas Customers"
+                                        isLoading={loading}
+                                        columns={[
+                                            { title: "Sl No", field: 'tableData.id' },
+                                            { title: 'Name', field: 'name' },
+                                            { title: 'Main Aadhaar', field: 'mainAadhaar' },
+                                            { title: 'Family Aadhaar', field: 'familyAadhaar' },
+                                            { title: 'Mobile', field: 'mobile' || "null" },
+                                            { title: 'Reg No', field: 'regNo' || "NA" },
+                                            { title: 'Consumer No', field: 'ConsumerNO' },
+                                            { title: 'Main Agent', field: 'mainAgent' },
+                                            { title: 'Sub Agent', field: 'subAgent' || "NA" },
+                                            { title: "Remarks", field: "remarks" }
 
 
-                                    }}
-                                />
+                                        ]}
+
+                                        data={userlist}
+                                        options={{
+                                            exportButton: true,
+                                            exportAllData: true,
+                                            filtering: true,
+                                            sorting: true,
+                                            pageSizeOptions: [5, 20, 50, 100, 200, 500],
+                                            headerStyle: {
+                                                backgroundColor: '#01579b',
+                                                color: '#FFF'
+                                            }
+
+
+                                        }}
+                                    />
+                                </Grid>
                             </Grid>
-                        </Grid>
 
 
-                    )}
-                </div>
+                        )}
+                    </div>
 
-            </Container>
+                </Container>}
             <FooterSection />
 
 
