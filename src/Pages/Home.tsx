@@ -14,6 +14,7 @@ import {
   CssBaseline,
   TextField,
 } from "@material-ui/core";
+import DialogContentText from '@material-ui/core/DialogContentText';
 import FooterSection from "../Components/Footer";
 import { useHistory } from "react-router-dom";
 import { httpClient } from "../Common/Service";
@@ -131,21 +132,30 @@ const Home = () => {
   const [nameuser, setNameuser] = React.useState("")
 
   const [userObj, setUserObj] = React.useState({})
+  const [openAlert, setOpenAlert] = React.useState(false);
+
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-
-
-
-
-
-
   const handleClose = () => {
     setOpen(false);
   };
 
+
+
+
+
+
+  const handleClickOpenAlert = () => {
+    setOpenAlert(true);
+
+  };
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   const hour = today.getHours();
   const wish = `Good ${(hour < 12 && "Morning") || (hour < 17 && "Afternoon") || "Evening"
@@ -275,12 +285,14 @@ const Home = () => {
     }
   };
   const handleDelete = async (customer: any) => {
-    console.log("customer", customer);
     try {
+
       const result = await axios.post(BASE_URL + "customer/delete", { customerId: customer._id })
       if (result.data && result.data != undefined) {
         showToast("Customer deleted successfullly", "success");
         window.location.reload();
+        setOpenAlert(false);
+
       }
     } catch (error) {
       showToast(error.response.data.message, "error")
@@ -453,11 +465,13 @@ const Home = () => {
                 }}
               >
                 <Grid item xs={12} sm={12} md={12} style={{ marginTop: "-40PX" }}>
+
                   <Card className={classes.card} key={i} >
                     <CardContent className={classes.cardContent} style={{ marginLeft: "2rem" }}>
                       <Typography color="textSecondary" gutterBottom>
                         Customer's Details
-                    </Typography>
+                      </Typography>
+
                       <CardHeader
                         action={
                           <div style={{ margin: "0px", padding: "0px" }}>
@@ -467,9 +481,9 @@ const Home = () => {
                             {getUser() ?
                               <IconButton
                                 aria-label="settings"
-                                onClick={() => handleDelete(user)}
+
                               >
-                                <DeleteIcon />
+                                <DeleteIcon onClick={() => (handleClickOpenAlert())} />
                               </IconButton> : null
                             }
                           </div>
@@ -520,10 +534,33 @@ const Home = () => {
 
                       </div>
                     </CardContent>
+                    <div>
+
+                      <Dialog
+                        open={openAlert}
+                        onClose={handleCloseAlert}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                      >
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            Make sure you want to remove this consumer?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloseAlert} color="primary">
+                            No
+                          </Button>
+                          <Button onClick={() => handleDelete(user)} color="primary" autoFocus>
+                            Yes
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </div>
                     <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
                       <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                         Update Customer Data :
-        </DialogTitle>
+                      </DialogTitle>
                       <DialogContent dividers>
                         {users.map((user, i) => (
                           <Grid container>
@@ -659,7 +696,7 @@ const Home = () => {
                       <DialogActions>
                         <Button autoFocus onClick={handleupdate} color="primary"   >
                           Save & Update
-          </Button>
+                        </Button>
                       </DialogActions>
                     </Dialog>
                   </Card>
