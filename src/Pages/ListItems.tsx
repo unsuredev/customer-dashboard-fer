@@ -11,6 +11,7 @@ import Link from '@material-ui/core/Link';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -53,9 +54,19 @@ export const mainListItems = (
     </Link>
 
 
+    <Link href="/trashUsers">
+      <ListItem button>
+        <ListItemIcon>
+          <RestoreFromTrashIcon color="secondary" />
+        </ListItemIcon>
+        <ListItemText primary="Trash Users" />
+      </ListItem>
+    </Link>
 
 
-    
+
+
+
 
   </div>
 );

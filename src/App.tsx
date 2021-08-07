@@ -11,6 +11,7 @@ import ResponsiveDrawer from './Pages/Drawer';
 import CustomerStats from './Pages/CustomerStats';
 import Reports from './Pages/Report';
 import AgentList from './Pages/AgentManagement';
+import TrashConsumerTable from "./Pages/TrashUsers";
 
 import { ToastProvider } from "./Common/ToastProvider";
 import './App.css';
@@ -45,6 +46,8 @@ const App = () => {
               <Route exact path="/cst" component={CustomerStats} />
               <Route exact path="/reports" component={Reports} />
               <Route exact path="/agentlist" component={AgentList} />
+              <Route exact path="/trashUsers" component={TrashConsumerTable} />
+
             </Switch>
           </Router>
         </ToastProvider>

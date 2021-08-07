@@ -489,14 +489,14 @@ const Home = () => {
                           </div>
                         }
                         //@ts-ignore
-                        title={user.name}
+                        title={user.name.toUpperCase()}
                       />
                       <CardHeader style={{ textAlign: "center" }} />
                       <div style={{ marginTop: "-40px" }}>
                         {/* @ts-ignore */}
                         <Typography>Sl No : {user.slNo || "NA"}</Typography>
                         {/* @ts-ignore */}
-                        <Typography>Name : {user.name}</Typography>
+                        <Typography>Name : {user.name.toUpperCase()}</Typography>
 
                         {/* @ts-ignore */}
                         <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
@@ -517,11 +517,11 @@ const Home = () => {
 
                         {/* @ts-ignore */}
 
-                        <Typography>Main Agent : {user.mainAgent}</Typography>
+                        <Typography>Main Agent : {user.mainAgent.toUpperCase()}</Typography>
                         {/* @ts-ignore */}
 
                         <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
-                        <Typography>Remarks : {user.remarks || "NA"}</Typography>
+                        <Typography>Remarks : {user.remarks.toUpperCase()|| "NA"}</Typography>
                         {/* @ts-ignore */}
 
                         <Typography>Created On : {user.date || "NA"}</Typography>
