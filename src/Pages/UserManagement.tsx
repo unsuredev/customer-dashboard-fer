@@ -21,7 +21,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import ResponsiveDrawer from "./Drawer";
 import Switch from '@material-ui/core/Switch';
-
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
@@ -104,6 +105,17 @@ const MemberSignUp = () => {
   }, [])
 
 
+  const toggleChecked = async (email:any) => {
+    try {
+      const result = await httpClient("user/block", "POST" ,{"email":email});
+      showToast(result.message, "success");
+      window.location.reload();
+    } catch (error) {
+      showToast("Something went wrong! try later", "error");
+    }
+  };
+
+
   const handleUsersList = async () => {
     try {
       const result = await httpClient("users/get", "GET");
@@ -127,10 +139,7 @@ const MemberSignUp = () => {
               </Typography>
             <h4>Code: 13816000</h4>
           </Grid>
-
         </Grid>
-
-
       </Container>
       <Container component="main" maxWidth="md">
         <Grid container  >
@@ -155,24 +164,20 @@ const MemberSignUp = () => {
                       </TableCell>
                       {/* @ts-ignore */}
                       <TableCell align="left">{user.email}</TableCell>
-
-                      <TableCell >   <Switch
-                        checked={state.checkedA}
-                        onChange={handleSwitch}
-                        name="checkedA"
-                        inputProps={{ 'aria-label': 'secondary checkbox' }}
-                      /></TableCell>
-
-
-
+                      <TableCell >  
+                        <FormControlLabel
+                         //@ts-ignore
+                          control={<Switch checked={user.active} onChange={()=>toggleChecked(user.email)} />}
+                          label="Normal"
+                        />
+                      
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-
           </Grid>
-
         </Grid>
         <Grid item>
           <Button

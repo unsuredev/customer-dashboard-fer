@@ -88,9 +88,9 @@ const CustomerStats = () => {
     };
 
 
-    React.useEffect(() => {
-        fetchUsers()
-    }, []);
+    // React.useEffect(() => {
+    //     fetchUsers()
+    // }, []);
 
     const startDateChange = (date: any) => {
         const format = "YYYY-MM-DD"
@@ -113,10 +113,10 @@ const CustomerStats = () => {
             const result = await httpClient("customer/getCustomerStats", "POST", {
                 "start_date": firstDate, "end_date": lastDate,
             });
+            if (result!=null){
             setUsers(result.data);
             setLoading(false)
-
-
+            }
         }
         catch (error) {
             console.error(error);
@@ -253,7 +253,7 @@ const CustomerStats = () => {
                                 <TableRow key={i}>
                                     <TableCell>{i + 1}</TableCell>
                                     <TableCell>{row.join_date}</TableCell>
-                                    <TableCell>{row.customers.length}</TableCell>
+                                    {/* <TableCell>{row.customers.length}</TableCell> */}
                                     <TableCell>
                                         <Link color="primary" onClick={() => usersByDate(i)}>
                                             < ExpandMoreIcon />

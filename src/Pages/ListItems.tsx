@@ -59,7 +59,7 @@ export const mainListItems = (
         <ListItemIcon>
           <RestoreFromTrashIcon color="secondary" />
         </ListItemIcon>
-        <ListItemText primary="Trash Users" />
+        <ListItemText primary="Trash Consumers" />
       </ListItem>
     </Link>
 

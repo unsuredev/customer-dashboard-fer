@@ -564,8 +564,6 @@ const Home = () => {
                       <DialogContent dividers>
                         {users.map((user, i) => (
                           <Grid container>
-
-
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
                               <TextField
                                 id="outlined-basic"
@@ -577,25 +575,9 @@ const Home = () => {
                                 value={customer.name}
                                 onChange={handleChangeUser}
                               />
-
-
                             </Grid>
 
-
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-                              <TextField
-                                id="outlined-basic"
-                                label="Mobile"
-                                name="mobile"
-                                variant="outlined"
-                                fullWidth
-                                type="text"
-                                value={customer.mobile}
-                                onChange={handleChangeUser}
-                              />
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
                               <TextField
                                 id="outlined-basic"
                                 label="Main Aadhaar"
@@ -617,6 +599,18 @@ const Home = () => {
                                 fullWidth
                                 type="text"
                                 value={customer.familyAadhaar}
+                                onChange={handleChangeUser}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                              <TextField
+                                id="outlined-basic"
+                                label="Mobile"
+                                name="mobile"
+                                variant="outlined"
+                                fullWidth
+                                type="text"
+                                value={customer.mobile}
                                 onChange={handleChangeUser}
                               />
                             </Grid>

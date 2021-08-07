@@ -15,7 +15,7 @@ const  Copyright = ()=> {
         {new Date().getFullYear()}
         {'.'}
         <p style={{fontFamily:"Pacifico"}}>  Designed and developed by    
-        <a href="https://www.facebook.com/iamunsuredev/" target="_blank" >Jamal</a></p>
+        <a href="https://www.facebook.com/unsuredev/" target="_blank" >Jamal</a></p>
      
       </Typography>
     );
