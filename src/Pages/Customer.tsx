@@ -79,6 +79,7 @@ const Customer = () => {
   const { showToast } = React.useContext(ToastContext);
   const [lastUser, setLastUser] = React.useState({});
   const [agentList, setAgetList] = React.useState("");
+  const [disabled, setDisabled]=React.useState(false)
   const CHARACTER_LIMIT = 12;
 
 
@@ -116,10 +117,12 @@ const Customer = () => {
   const handleRegister = async (e: any) => {
     try {
       e.preventDefault();
+      setDisabled(true)
       const result = await axios.post(BASE_URL + "customer/add", customer)
       if (result.data.data && result.data != null) {
         setLastUser(result.data.data.result);
         showToast("Consumer added susccesssfully", "success");
+        setDisabled(false)
       }
     } catch (error) {
       if (error) {

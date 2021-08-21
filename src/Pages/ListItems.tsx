@@ -12,7 +12,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
-
+import HistoryIcon from '@material-ui/icons/History';
 import SearchIcon from '@material-ui/icons/Search';
 
 export const mainListItems = (
@@ -60,6 +60,16 @@ export const mainListItems = (
           <RestoreFromTrashIcon color="secondary" />
         </ListItemIcon>
         <ListItemText primary="Trash Consumers" />
+      </ListItem>
+    </Link>
+
+
+    <Link href="/changepassword">
+      <ListItem button>
+        <ListItemIcon>
+          <HistoryIcon color="secondary" />
+        </ListItemIcon>
+        <ListItemText primary="Change Password" />
       </ListItem>
     </Link>
 

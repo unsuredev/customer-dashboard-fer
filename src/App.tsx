@@ -12,7 +12,7 @@ import CustomerStats from './Pages/CustomerStats';
 import Reports from './Pages/Report';
 import AgentList from './Pages/AgentManagement';
 import TrashConsumerTable from "./Pages/TrashUsers";
-
+import ResetPassword from './Pages/ResetPassword'
 import { ToastProvider } from "./Common/ToastProvider";
 import './App.css';
 
@@ -47,7 +47,7 @@ const App = () => {
               <Route exact path="/reports" component={Reports} />
               <Route exact path="/agentlist" component={AgentList} />
               <Route exact path="/trashUsers" component={TrashConsumerTable} />
-
+              <Route exact path="/changepassword" component={ResetPassword} />
             </Switch>
           </Router>
         </ToastProvider>
