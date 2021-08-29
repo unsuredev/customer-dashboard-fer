@@ -521,7 +521,7 @@ const Home = () => {
                         {/* @ts-ignore */}
 
                         <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
-                        <Typography>Remarks : {user.remarks.toUpperCase()|| "NA"}</Typography>
+                        <Typography>Remarks : {user.remarks|| "NA"}</Typography>
                         {/* @ts-ignore */}
 
                         <Typography>Created On : {user.date || "NA"}</Typography>
