@@ -80,7 +80,7 @@ export const mainListItems = (
         <ListItemIcon>
           <BackupIcon color="secondary" />
         </ListItemIcon>
-        <ListItemText primary="Upload imgage" />
+        <ListItemText primary="Upload Image" />
       </ListItem>
     </Link>
 
