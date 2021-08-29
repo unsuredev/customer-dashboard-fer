@@ -656,6 +656,20 @@ const Home = () => {
                                 />
                               }
                             </Grid>
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                            {customer.mainAgent &&
+
+<TextField
+  id="outlined-basic"
+  label="Main Agent"
+  name="mainAgent"
+  variant="outlined"
+  fullWidth
+  type="text"
+  value={customer.mainAgent}
+  onChange={handleChangeUser}
+/>}
+</Grid>
                     
         
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
