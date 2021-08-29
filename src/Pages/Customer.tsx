@@ -15,10 +15,25 @@ import { httpClient } from "../Common/Service";
 import { ToastContext } from "../Common/ToastProvider";
 import FooterSection from "../Components/Footer";
 import jwt_decode from "jwt-decode";
-
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import ResponsiveDrawer from "./Drawer";
 import { BASE_URL } from "../Common/constant";
 import axios from "axios";
+import clsx from 'clsx';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import { red } from '@material-ui/core/colors';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -72,13 +87,16 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: "100%",
   },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  }
 }));
 
 const Customer = () => {
   const classes = useStyles();
   const { showToast } = React.useContext(ToastContext);
   const [lastUser, setLastUser] = React.useState({});
-  const [agentList, setAgetList] = React.useState("");
+  const [agentList, setAgetList] = React.useState([]);
   const [disabled, setDisabled]=React.useState(false)
   const CHARACTER_LIMIT = 12;
 
@@ -94,7 +112,20 @@ const Customer = () => {
         customer.addedBy = name;
       }
     }
-  });
+
+    async function getCharacters() {
+      const response = await fetch("https://jamanenterprise.herokuapp.com/agent/getall");
+      const body = await response.json();
+      console.log("res==>", body.data.result)
+      setAgetList(body.data.result)
+      //@ts-ignore
+      setAgetList(body.data.result.map(({ name  }) => ({ label: name, value: name })));
+      console.log("res==>2", agentList)
+
+    }
+    getCharacters();
+  }, []);
+
 
   const [customer, setCustomer] = React.useState({
     name: "",
@@ -133,11 +164,7 @@ const Customer = () => {
 
 
 
-  const handleChangedropdown = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    setAgetList(event.target.value as string);
-  };
+  
 
 
   return (
@@ -252,21 +279,6 @@ const Customer = () => {
                   </Grid>
 
                   {/* <Grid item xs={12}>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={agentList}
-                        onChange={handleChangedropdown}
-                      >
-                        <MenuItem value={agentList}>{agentList}</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid> */}
-                  <Grid item xs={12}>
                     <TextField
                       variant="outlined"
                       required
@@ -279,8 +291,27 @@ const Customer = () => {
                       onChange={handleChange}
                       value={customer.mainAgent}
                     />
+                  </Grid> */}
+                  <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-required-label">Main Agent *</InputLabel>
+                      <Select
+                        onChange={handleChange}
+                        displayEmpty
+                        className={classes.selectEmpty}
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        name="mainAgent"
+                      >
+                        {agentList.map(item => (
+                          <MenuItem
+                            //@ts-ignore
+                            key={item.label} value={item.value} >{item.label}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Grid>
-
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"

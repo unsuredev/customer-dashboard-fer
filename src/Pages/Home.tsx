@@ -14,6 +14,7 @@ import {
   CssBaseline,
   TextField,
 } from "@material-ui/core";
+import { red } from '@material-ui/core/colors';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import FooterSection from "../Components/Footer";
 import { useHistory } from "react-router-dom";
@@ -72,6 +73,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  media: {
+    height: 340,
+  },
+  imgSize:{
+    height:200,
+    width:400
+  }
 }));
 
 
@@ -86,7 +94,8 @@ const styles = (theme: Theme) =>
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
-    },
+    }
+
   });
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
@@ -311,6 +320,7 @@ const Home = () => {
       return false;
     }
   };
+
 
 
   React.useEffect(() => {
@@ -590,7 +600,6 @@ const Home = () => {
                               />
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
                               <TextField
                                 id="outlined-basic"
                                 label="Family Aadhaar"
@@ -609,13 +618,16 @@ const Home = () => {
                                 name="mobile"
                                 variant="outlined"
                                 fullWidth
-                                type="text"
+                                type="number"
                                 value={customer.mobile}
                                 onChange={handleChangeUser}
+                                onInput={(e) => {
+                                  //@ts-ignore
+                                  e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
+                                }}
                               />
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
                               {customer.regNo &&
                                 <TextField
                                   id="outlined-basic"
@@ -644,19 +656,8 @@ const Home = () => {
                                 />
                               }
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
-                              <TextField
-                                id="outlined-basic"
-                                label="Main Agent"
-                                name="mainAgent"
-                                variant="outlined"
-                                fullWidth
-                                type="text"
-                                value={customer.mainAgent}
-                                onChange={handleChangeUser}
-                              />
-                            </Grid>
+                    
+        
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
                               <TextField
@@ -696,9 +697,11 @@ const Home = () => {
                   </Card>
                 </Grid>
               </Grid>
+              
             ))}
           </Grid>
         </Container>
+  
       </div>
       {/* Footer */}
 

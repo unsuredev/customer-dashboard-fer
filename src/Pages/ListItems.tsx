@@ -14,7 +14,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import HistoryIcon from '@material-ui/icons/History';
 import SearchIcon from '@material-ui/icons/Search';
-
+import BackupIcon from '@material-ui/icons/Backup';
 export const mainListItems = (
   <div>
         <Link href="/customer">
@@ -72,6 +72,21 @@ export const mainListItems = (
         <ListItemText primary="Change Password" />
       </ListItem>
     </Link>
+
+
+
+    <Link href="/customerDocs">
+      <ListItem button>
+        <ListItemIcon>
+          <BackupIcon color="secondary" />
+        </ListItemIcon>
+        <ListItemText primary="Upload imgage" />
+      </ListItem>
+    </Link>
+
+
+
+
 
 
 
