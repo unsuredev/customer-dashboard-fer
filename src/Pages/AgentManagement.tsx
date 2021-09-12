@@ -17,7 +17,10 @@ import Copyright from "../Components/Copyright";
 import { httpClient } from "../Common/Service";
 import Container from "@material-ui/core/Container";
 import { ToastContext } from "../Common/ToastProvider";
-import { Link as RouterLink, useHistory } from "react-router-dom";
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ResponsiveDrawer from "./Drawer";
 
 
@@ -34,16 +37,11 @@ const AgentList = () => {
     root: {
       height: "100vh",
     },
-    image: {
-      backgroundImage: "url(https://source.unsplash.com/1600x900/?architecture)",
-      backgroundRepeat: "no-repeat",
-      backgroundColor:
-        theme.palette.type === "light"
-          ? theme.palette.grey[50]
-          : theme.palette.grey[900],
-      backgroundSize: "cover",
-      backgroundPosition: "center",
+    heading: {
+      fontSize: theme.typography.pxToRem(15),
+      fontWeight: theme.typography.fontWeightRegular,
     },
+
     paper: {
       margin: theme.spacing(8, 4),
       display: "flex",
@@ -124,34 +122,48 @@ const AgentList = () => {
 
         <Grid container  >
           <Grid item xs={12} sm={12} md={12} >
-            <TableContainer component={Paper}>
-              <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Sl No</TableCell>
-                    <TableCell>Agent Name</TableCell>
-                    <TableCell align="right">Mobile Number</TableCell>
-                    <TableCell align="right">Address</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {list.map((agent, i) => (
-                    //@ts-ignore
-                    <TableRow key={agent.name}>
-                      <TableCell align="left">{i + 1}</TableCell>
-                      <TableCell component="th" scope="row">
-                        {/* @ts-ignore */}
-                        {agent.name}
-                      </TableCell>
-                      {/* @ts-ignore */}
-                      <TableCell align="right">{agent.mobile}</TableCell>
-                      {/* @ts-ignore */}
-                      <TableCell align="right">{agent.address}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+          <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>View All Agents list</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        <TableContainer component={Paper}>
+   
+
+   <Table className={classes.table} aria-label="simple table">
+     <TableHead>
+       <TableRow>
+         <TableCell>Sl No</TableCell>
+         <TableCell>Agent Name</TableCell>
+         <TableCell align="right">Mobile Number</TableCell>
+         <TableCell align="right">Address</TableCell>
+       </TableRow>
+     </TableHead>
+     <TableBody>
+       {list.map((agent, i) => (
+         //@ts-ignore
+         <TableRow key={agent.name}>
+           <TableCell align="left">{i + 1}</TableCell>
+           <TableCell component="th" scope="row">
+             {/* @ts-ignore */}
+             {agent.name}
+           </TableCell>
+           {/* @ts-ignore */}
+           <TableCell align="right">{agent.mobile}</TableCell>
+           {/* @ts-ignore */}
+           <TableCell align="right">{agent.address}</TableCell>
+         </TableRow>
+       ))}
+     </TableBody>
+   </Table>
+ </TableContainer>
+        </AccordionDetails>
+      </Accordion>
+           
           </Grid>
         </Grid>
       </Container>
@@ -159,8 +171,7 @@ const AgentList = () => {
         <Grid container>
           <Grid item xs={12} sm={12} md={12}>
             <div className={classes.paper}>
-
-              <h2>Register a agent</h2>
+              <h2>Register New Agent</h2>
               <form className={classes.form} noValidate>
                 <TextField
                   variant="outlined"

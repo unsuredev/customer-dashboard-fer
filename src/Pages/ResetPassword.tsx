@@ -115,10 +115,10 @@ const ResetPassword = () => {
             <br></br>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
-      <ResponsiveDrawer />
+                <ResponsiveDrawer />
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h5">
-                        Change Password
+                        Change Your Password
                 </Typography>
                     <form className={classes.form} noValidate>
                         <TextField
@@ -154,7 +154,7 @@ const ResetPassword = () => {
                             className={classes.submit}
                             onClick={handleSubmit}
                         >
-                            Reset
+                            Change it
                     </Button>
                     </form>
                 </div>

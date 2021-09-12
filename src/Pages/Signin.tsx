@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/1600x900/?architecture)',
+    backgroundImage: 'url(https://source.unsplash.com/1600x900/?animal)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -90,7 +90,6 @@ const SignIn = () => {
         localStorage.setItem("access_token", result.data.data.token)
         showToast("Loggedin susccesssfully", "success")
         history.push('/home')
-
       }
     } catch (error) {
       if (error.response) {

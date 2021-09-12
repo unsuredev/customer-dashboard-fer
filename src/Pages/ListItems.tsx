@@ -9,12 +9,10 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Link from '@material-ui/core/Link';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import HistoryIcon from '@material-ui/icons/History';
 import SearchIcon from '@material-ui/icons/Search';
-import BackupIcon from '@material-ui/icons/Backup';
 export const mainListItems = (
   <div>
         <Link href="/customer">
@@ -74,7 +72,7 @@ export const mainListItems = (
     </Link>
 
 
-
+{/* 
     <Link href="/customerDocs">
       <ListItem button>
         <ListItemIcon>
@@ -82,7 +80,7 @@ export const mainListItems = (
         </ListItemIcon>
         <ListItemText primary="Upload Image" />
       </ListItem>
-    </Link>
+    </Link> */}
 
 
 

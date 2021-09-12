@@ -88,9 +88,9 @@ const CustomerStats = () => {
     };
 
 
-    // React.useEffect(() => {
-    //     fetchUsers()
-    // }, []);
+    React.useEffect(() => {
+        fetchUsers()
+    }, []);
 
     const startDateChange = (date: any) => {
         const format = "YYYY-MM-DD"
@@ -124,23 +124,23 @@ const CustomerStats = () => {
     }
 
 
-    const fetchUsersByAgent = async () => {
+    // const fetchUsersByAgent = async () => {
 
-        try {
-            setLoading(true)
-            //@ts-ignore
-            const result = await httpClient("customer/customerbyagent", "POST", {
-                "mainAgent": agentName.name
-            });
-            setUsers(result.data);
-            setLoading(false)
+    //     try {
+    //         setLoading(true)
+    //         //@ts-ignore
+    //         const result = await httpClient("customer/customerbyagent", "POST", {
+    //             "mainAgent": agentName.name
+    //         });
+    //         setUsers(result.data);
+    //         setLoading(false)
 
 
-        }
-        catch (error) {
-            console.error(error);
-        }
-    }
+    //     }
+    //     catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 
 
 
@@ -166,7 +166,7 @@ const CustomerStats = () => {
     return (
         <React.Fragment>
             <ResponsiveDrawer />
-            <Container maxWidth="xs" style={{ display: "flex" }}>
+            {/* <Container maxWidth="xs" style={{ display: "flex" }}>
 
                 <Grid item xs={12} sm={12} md={8}>
                     <TextField
@@ -188,7 +188,7 @@ const CustomerStats = () => {
 
             </Container>
 
-            <br></br>
+            <br></br> */}
 
             <Container maxWidth="md" style={{ paddingLeft: "4rem" }} >
 
@@ -231,12 +231,10 @@ const CustomerStats = () => {
                                 FIND by DATE
                             </Button>
                         </Grid>
-
                     </MuiPickersUtilsProvider>
                 </Grid>
             </Container>
             < Container maxWidth="md" style={{ marginTop: "50px", marginRight: "5rem" }}>
-
                 <Grid container >
                     <br></br>
                     <Table size="small">
@@ -245,7 +243,6 @@ const CustomerStats = () => {
                                 <TableCell>Sl No.</TableCell>
                                 <TableCell>Date</TableCell>
                                 <TableCell>No of Customer</TableCell>
-
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -253,7 +250,7 @@ const CustomerStats = () => {
                                 <TableRow key={i}>
                                     <TableCell>{i + 1}</TableCell>
                                     <TableCell>{row.join_date}</TableCell>
-                                    {/* <TableCell>{row.customers.length}</TableCell> */}
+                                    <TableCell>{row.customers.length}</TableCell>
                                     <TableCell>
                                         <Link color="primary" onClick={() => usersByDate(i)}>
                                             < ExpandMoreIcon />
@@ -266,11 +263,7 @@ const CustomerStats = () => {
 
             </Container>
             {loading ? <div style={{ paddingTop: "30px", justifyContent: "center", alignItems: "center", textAlign: "center", width: "100%" }}><p>This may take few mins...</p> <CircularProgress /> </div> :
-
                 <Container style={{ margin: "auto", justifyContent: "center", textAlign: "center" }}>
-
-
-
                     <div style={{ marginTop: "50px", justifyContent: "center", alignItems: "center", textAlign: "center", width: "100%" }}>
 
                         {userlist.length > 0 && (

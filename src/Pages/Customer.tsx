@@ -33,7 +33,14 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Paper from '@material-ui/core/Paper';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -47,8 +54,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto",
   },
   root: {
-    margin: theme.spacing(1),
-    width: "25ch",
     flexGrow: 1,
   },
   heroContent: {
@@ -89,7 +94,10 @@ const useStyles = makeStyles((theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
-  }
+  },
+  table: {
+    minWidth: 650,
+  },
 }));
 
 const Customer = () => {
@@ -157,6 +165,7 @@ const Customer = () => {
       }
     } catch (error) {
       if (error) {
+        //@ts-ignore
         showToast(error.response.data.message, "error")
       }
     }
@@ -171,13 +180,17 @@ const Customer = () => {
     <React.Fragment>
       <CssBaseline />
       <ResponsiveDrawer />
-      <Container maxWidth="md" style={{ display: "flex", marginLeft: "15rem" }}>
-        <Grid container>
-          <Grid item xs={12} sm={12} md={6}>
+
+
+      <div className={classes.root}>
+      <Grid container spacing={1}>
+      <Grid item xs={12} sm={12} md={3}     lg={3}>
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}     lg={4} >
             <div>
-              <h2>Add New Customer</h2>
+              <h2>New Customer Registration</h2>
               <form className={classes.form} noValidate>
-                <Grid container spacing={2}>
+                <Grid container spacing={1}>
                   <Grid item xs={12}>
                     <TextField
                       autoComplete="name"
@@ -243,10 +256,8 @@ const Customer = () => {
                         //@ts-ignore
                         e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10)
                       }}
-
                     />
                   </Grid>
-
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"
@@ -339,7 +350,6 @@ const Customer = () => {
                     />
                   </Grid>
                 </Grid>
-
                 <Button
                   fullWidth
                   variant="contained"
@@ -352,57 +362,55 @@ const Customer = () => {
               </form>
             </div>
           </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={4}
-            style={{ marginTop: "50px", marginLeft: "2rem" }}
-          >
-            <Card className={classes.card}>
-              <div
-                style={{
-                  margin: "5px",
-                  textAlign: "left",
-                  marginLeft: "10px",
-                  marginTop: "40px",
-                }}
-              >
-
-                <h2>Last saved registration's details</h2>
-                {/* @ts-ignore */}
-                <Typography>Name : {lastUser.name}</Typography>
-                <Typography variant="subtitle2" gutterBottom>
-                  {/* @ts-ignore */}
-                Main Aadhaar :{lastUser.mainAadhaar}
-                </Typography>
-                {/* @ts-ignore */}
-                <Typography> Family Aadhaar :{lastUser.familyAadhaar}</Typography>
-                {/* @ts-ignore */}
-                <Typography> Mobile: {lastUser.mobile}</Typography>
-                {/* @ts-ignore */}
-
-
-                <Typography variant="subtitle2" gutterBottom>
-                  {/* @ts-ignore */}
-                Registration No :{lastUser.regNo}
-                </Typography>
-                {/* @ts-ignore */}
-                <Typography> Consumer No :{lastUser.consumerNo}</Typography>
-                {/* @ts-ignore */}
-                <Typography> Main Agent :{lastUser.mainAgent}</Typography>
-                {/* @ts-ignore */}
-                <Typography> Sub Agent :{lastUser.subAgent}</Typography>
-                {/* @ts-ignore */}
-                <Typography> Remarks  :{lastUser.remarks}</Typography>
-              </div>
-            </Card>
+          <Grid style={{paddingTop:"20px"}}>
+            <h2>Last Registration Details</h2>
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left">Customer Name : {lastUser.name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left"> Main Aadhaar :{lastUser.mainAadhaar}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left"> Family Aadhaar :{lastUser.familyAadhaar}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left">          Mobile No: {lastUser.mobile}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left">   Registration No :{lastUser.regNo}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left"> Consumer No :{lastUser.consumerNo}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left"> Main Agent :{lastUser.mainAgent}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left">Sub Agent :{lastUser.subAgent}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    {/* @ts-ignore */}
+                    <TableCell align="left">  Remarks  :{lastUser.remarks}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
         </Grid>
-      </Container>
-
-      <FooterSection />
+    </div>
     </React.Fragment>
   );
 };

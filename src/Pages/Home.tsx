@@ -142,6 +142,7 @@ const Home = () => {
 
   const [userObj, setUserObj] = React.useState({})
   const [openAlert, setOpenAlert] = React.useState(false);
+  const CHARACTER_LIMIT = 12;
 
 
   const handleClickOpen = () => {
@@ -289,6 +290,7 @@ const Home = () => {
       }
     } catch (error) {
       if (error) {
+        //@ts-ignore
         showToast(error.response.data.message, "error")
       }
     }
@@ -304,7 +306,10 @@ const Home = () => {
 
       }
     } catch (error) {
-      showToast(error.response.data.message, "error")
+      if (error) {
+        //@ts-ignore
+        showToast(error.response.data.message, "error")
+      }
     }
   };
 
@@ -347,7 +352,7 @@ const Home = () => {
         <div className={classes.heroContent}>
 
 
-          <Container maxWidth="md" component="main" style={{ marginTop: "-60px", paddingTop: "-10px" }}>
+          <Container maxWidth="md" component="main" style={{ marginTop: "-40px", paddingTop: "-10px" }}>
             {userGreetings()}
 
 
@@ -355,7 +360,7 @@ const Home = () => {
             <Grid
               container
               className="maincontainer"
-              style={{ justifyContent: "center", textAlign: "center", marginTop: "-10px", marginLeft: "4rem" }}
+              style={{ justifyContent: "center", textAlign: "center", marginTop: "-10px"}}
             >
 
               <Grid item xs={12} sm={12} md={3}>
@@ -365,12 +370,16 @@ const Home = () => {
                     label="Main Aadhaar No"
                     variant="outlined"
                     fullWidth
-                    type="aadhaar"
                     name="aadhaar"
                     autoComplete="aadhaar"
                     autoFocus
                     value={state.aadhaar}
                     onChange={handleChange}
+                    type="tel"
+                    inputProps={{
+                      maxlength: CHARACTER_LIMIT
+                    }}
+
 
                   />
                 </form>
@@ -387,6 +396,9 @@ const Home = () => {
                     type="tel"
                     value={state.mobile}
                     onChange={handleChange}
+                    inputProps={{
+                      maxlength: 10
+                    }}
                   />
                 </form>
               </Grid>
@@ -458,7 +470,7 @@ const Home = () => {
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid className="maincontainer" style={{ textAlign: "center" }}>
             {users.length === 0 && (
-              <h2 style={{ margin: "auto", }}>Your Customer data will display here!...........</h2>
+              <h2 style={{ margin: "auto",marginTop:"100px" }}>Your customer data will display here!</h2>
             )}
           </Grid>
           <Grid container spacing={4} className="maincontainer">
@@ -657,19 +669,12 @@ const Home = () => {
                               }
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-                            {customer.mainAgent &&
 
-<TextField
-  id="outlined-basic"
-  label="Main Agent"
-  name="mainAgent"
-  variant="outlined"
-  fullWidth
-  type="text"
-  value={customer.mainAgent}
-  onChange={handleChangeUser}
-/>}
-</Grid>
+
+
+                              <Typography style={{color:"white", backgroundColor:"black"}} variant="h5"  gutterBottom> &nbsp;  &nbsp;Main Agent : {customer.mainAgent}</Typography>
+                            </Grid>
+
                     
         
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>

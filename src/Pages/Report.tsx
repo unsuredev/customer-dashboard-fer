@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
-
+import Link from '@material-ui/core/Link';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -146,11 +146,11 @@ const Reports = () => {
                                 <Card className={classes.card}>
                                     <CardContent className={classes.cardContent}>
                                         <Typography gutterBottom variant="h5" component="h2">
-                                            Total Member
+                                            Total Members
                                         </Typography>
-                                        <Typography>
-                                            {memberCount}
-                                        </Typography>
+                                        <Link href="/member" onClick={(e:any)=>e.preventDefault}>
+                                        {memberCount}
+                                        </Link>
                                     </CardContent>
                                     <CardActions>
                                     </CardActions>
@@ -160,11 +160,11 @@ const Reports = () => {
                                 <Card className={classes.card}>
                                     <CardContent className={classes.cardContent}>
                                         <Typography gutterBottom variant="h5" component="h2">
-                                            Total Agent
+                                            Total Agents
                                         </Typography>
-                                        <Typography>
-                                            {agent}
-                                        </Typography>
+                                        <Link href="/agentlist" onClick={(e:any)=>e.preventDefault}>
+                                        {agent}
+                                        </Link>
                                     </CardContent>
                                     <CardActions>
                                     </CardActions>

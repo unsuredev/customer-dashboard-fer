@@ -132,6 +132,7 @@ function ResponsiveDrawer() {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
+        
         <Toolbar>
           <IconButton
             color="inherit"
@@ -142,10 +143,12 @@ function ResponsiveDrawer() {
           >
             <MenuIcon />
           </IconButton>
+     
           <Typography variant="h6" noWrap>
             JAMAN HP GAS
           </Typography>
         </Toolbar>
+        
       </AppBar>
 
       <nav className={classes.drawer}>

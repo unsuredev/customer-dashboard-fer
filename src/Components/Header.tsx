@@ -54,6 +54,12 @@ const Header=()=> {
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
+      <img
+                            src={require("../../src/hpcl_logo.png").default}
+                            alt="smitch logo"
+                            width="40"
+                            height="40"
+                        />
         <Button size="large">JAMAN HP GAS</Button>
         <Typography
        variant="subtitle1" gutterBottom
