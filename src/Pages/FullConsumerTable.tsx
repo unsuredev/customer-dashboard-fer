@@ -5,6 +5,8 @@ import MUIDataTable from "mui-datatables";
 import MaterialTable from 'material-table';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link, Grid } from '@material-ui/core';
+import CsvDownloader from 'react-csv-downloader';
+import jwt_decode from "jwt-decode";
 
 export default function FullConsumerTable() {
 
@@ -26,6 +28,19 @@ export default function FullConsumerTable() {
     ]
 
 
+    const column = [
+        { displayName: 'Sl No', id: 'tableData.id' },
+        { displayName: "Old SlNo", id: "slNo" },
+        { displayName: "Name", id: "name" },
+        { displayName: "Main Aadhaar", id: "mainAadhaar" },
+        { displayName: "Family Aadhaar", id: "familyAadhaar" },
+        { displayName: "Mobile", id: "mobile" },
+        { displayName: "Reg No", id: '' },
+        { displayName: "Consumer No", id: '' },
+        { displayName: "Main Agent", id: 'mainAgent' },
+        { displayName: "Sub Agent", id: 'subAgent' },
+        { displayName: "Remarks", id: 'remarks' }
+    ];
 
 
 const fetcCustomerData=()=>{
@@ -45,6 +60,19 @@ const fetcCustomerData=()=>{
         fetcCustomerData()
     }, [])
 
+
+    const getUser = () => {
+        let token: any = localStorage.getItem("access_token");
+    
+        var decoded = jwt_decode(token);
+        //@ts-ignore
+        let { email } = decoded;
+        if (email === "jaman2021@gmail.com") {
+          return true;
+        } else {
+          return false;
+        }
+      };
     return (
         <React.Fragment>
             <CssBaseline />
@@ -79,6 +107,17 @@ const fetcCustomerData=()=>{
 
                     />
                 }
+                {getUser()?
+                 <div>
+      <CsvDownloader
+        filename="JamanHpGas"
+        extension=".csv"
+        separator=";"
+        wrapColumnChar="'"
+        datas={data}
+        columns={column}
+        text="ONE CLICK DOWNLOAD ALL CUSTOMER  DATA" />
+    </div>:null}
             </Container>
         </React.Fragment>
     );

@@ -23,6 +23,10 @@ import ResponsiveDrawer from "./Drawer";
 import Switch from '@material-ui/core/Switch';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
@@ -36,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
         : theme.palette.grey[900],
     backgroundSize: "cover",
     backgroundPosition: "center",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -144,6 +152,15 @@ const MemberSignUp = () => {
       <Container component="main" maxWidth="md">
         <Grid container  >
           <Grid item xs={12} sm={12} md={12} >
+          <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography className={classes.heading}>View All User list</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
             <TableContainer component={Paper}>
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
@@ -177,6 +194,9 @@ const MemberSignUp = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            </AccordionDetails>
+      </Accordion>
+    
           </Grid>
         </Grid>
         <Grid item>

@@ -345,24 +345,15 @@ const Home = () => {
     <React.Fragment>
       <CssBaseline />
       <ResponsiveDrawer />
-
-
       <div >
-
         <div className={classes.heroContent}>
-
-
           <Container maxWidth="md" component="main" style={{ marginTop: "-40px", paddingTop: "-10px" }}>
             {userGreetings()}
-
-
-
             <Grid
               container
               className="maincontainer"
               style={{ justifyContent: "center", textAlign: "center", marginTop: "-10px"}}
             >
-
               <Grid item xs={12} sm={12} md={3}>
                 <form className={classes.form} noValidate autoComplete="off">
                   <TextField
@@ -379,12 +370,9 @@ const Home = () => {
                     inputProps={{
                       maxlength: CHARACTER_LIMIT
                     }}
-
-
                   />
                 </form>
               </Grid>
-
               <Grid item xs={12} sm={12} md={3}>
                 <form className={classes.form} noValidate autoComplete="off">
                   <TextField
@@ -402,7 +390,6 @@ const Home = () => {
                   />
                 </form>
               </Grid>
-
               <Grid item xs={12} sm={12} md={3}>
                 <form className={classes.form} noValidate autoComplete="off">
                   <TextField
@@ -487,13 +474,11 @@ const Home = () => {
                 }}
               >
                 <Grid item xs={12} sm={12} md={12} style={{ marginTop: "-40PX" }}>
-
                   <Card className={classes.card} key={i} >
                     <CardContent className={classes.cardContent} style={{ marginLeft: "2rem" }}>
                       <Typography color="textSecondary" gutterBottom>
                         Customer's Details
                       </Typography>
-
                       <CardHeader
                         action={
                           <div style={{ margin: "0px", padding: "0px" }}>
@@ -503,7 +488,6 @@ const Home = () => {
                             {getUser() ?
                               <IconButton
                                 aria-label="settings"
-
                               >
                                 <DeleteIcon onClick={() => (handleClickOpenAlert())} />
                               </IconButton> : null
@@ -519,7 +503,6 @@ const Home = () => {
                         <Typography>Sl No : {user.slNo || "NA"}</Typography>
                         {/* @ts-ignore */}
                         <Typography>Name : {user.name.toUpperCase()}</Typography>
-
                         {/* @ts-ignore */}
                         <Typography>Main Aadhaar : {user.mainAadhaar}</Typography>
                         {/* @ts-ignore */}
@@ -536,7 +519,6 @@ const Home = () => {
                           Consumer No :{user.consumerNo || "NA"}{" "}
                         </Typography>
                         {/* @ts-ignore */}
-
                         {/* @ts-ignore */}
 
                         <Typography>Main Agent : {user.mainAgent.toUpperCase()}</Typography>
@@ -655,7 +637,6 @@ const Home = () => {
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-                              {customer.consumerNo &&
                                 <TextField
                                   id="outlined-basic"
                                   label="Consumer No"
@@ -666,12 +647,11 @@ const Home = () => {
                                   value={customer.consumerNo}
                                   onChange={handleChangeUser}
                                 />
-                              }
+                              
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
 
-
-
+                 
                               <Typography style={{color:"white", backgroundColor:"black"}} variant="h5"  gutterBottom> &nbsp;  &nbsp;Main Agent : {customer.mainAgent}</Typography>
                             </Grid>
 
