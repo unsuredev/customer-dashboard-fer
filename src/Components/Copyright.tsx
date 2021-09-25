@@ -14,11 +14,12 @@ const  Copyright = ()=> {
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
-        <p style={{fontFamily:"Pacifico"}}>  Designed and developed by    
-        <a href="https://www.facebook.com/unsuredev/" target="_blank" >Jamal</a></p>
+        <h1 style={{fontFamily:"Caramel"}}>  Designed and developed by    
+        <a href="https://www.facebook.com/unsuredev/" target="_blank" >Jamal</a></h1>
      
       </Typography>
     );
   }
 
   export default Copyright ;
+

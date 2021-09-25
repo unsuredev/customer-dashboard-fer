@@ -16,6 +16,7 @@ import { httpClient } from "../Common/Service";
 import ResponsiveDrawer from './Drawer'
 import FullConsumerTable from './FullConsumerTable'
 import { SettingsPhoneTwoTone } from "@material-ui/icons";
+import CsvDownloader from 'react-csv-downloader';
 
 
 
@@ -77,7 +78,10 @@ const Reports = () => {
     const [memberCount, setMemberCount] = React.useState("")
     const [agent, setAgent] = React.useState("")
     const [loading, setLoading] = React.useState(true)
-    const [show, setShow] = React.useState(false)
+    const [show, setShow] = React.useState(true)
+    const [button ,setButton] = React.useState(true)
+    const [limit, setLimit]=React.useState(500)
+    const [newdata, setNewdata]=React.useState([])
 
 
 
@@ -105,14 +109,38 @@ const Reports = () => {
 
 
 
-
+    const fetcCustomers=()=>{
+        setLimit(limit+500)
+        setLoading(true)
+        fetch(`http://localhost:4001/customer/getcustomers`)
+            .then(resp => resp.json())
+            .then(resp => {
+                setNewdata(resp.data)
+                setShow(true)
+            })
+    }
+    
 
 
     React.useEffect(() => {
         document.title = "Live Stats | JAMAN HP GAS  "
         fetchCount()
+        fetcCustomers()
     }, []);
 
+    const column = [
+        { displayName: 'Sl No', id: 'tableData.id' },
+        { displayName: "Old SlNo", id: "slNo" },
+        { displayName: "Name", id: "name" },
+        { displayName: "Main Aadhaar", id: "mainAadhaar" },
+        { displayName: "Family Aadhaar", id: "familyAadhaar" },
+        { displayName: "Mobile", id: "mobile" },
+        { displayName: "Reg No", id: '' },
+        { displayName: "Consumer No", id: '' },
+        { displayName: "Main Agent", id: 'mainAgent' },
+        { displayName: "Sub Agent", id: 'subAgent' },
+        { displayName: "Remarks", id: 'remarks' }
+    ];
 
 
     return (
@@ -136,8 +164,13 @@ const Reports = () => {
                                         </Typography>
                                         }
                                     </CardContent>
-
-
+                                    {show ? <CsvDownloader
+                                        filename="JamanHpGas"
+                                        extension=".csv"
+                                        separator=";"
+                                        wrapColumnChar="'"
+                                        datas={newdata}
+                                        columns={column} text="ONE CLICK DOWNLOAD ALL CUSTOMER  DATA" /> : <Button variant="contained">Wait! Downlod Not ready yet</Button>}
                                 </Card>
                             </Grid>
                         </div>
@@ -174,9 +207,9 @@ const Reports = () => {
                     </Container>
                 </div>
             </main>
-            <Container>
+            {/* <Container>
                 <FullConsumerTable />
-            </Container>
+            </Container> */}
             <FooterSection />
 
         </React.Fragment >

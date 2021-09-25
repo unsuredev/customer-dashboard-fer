@@ -114,6 +114,8 @@ const SignIn = () => {
             JAMAN HP GAS
           </Typography>
           <h4>Code: 13816000</h4>
+          <img src={require("../hp.png").default}  style={{borderRadius:"20%"}}
+          width="90px" height="90px" alt="hpgas logo" />
           <form className={classes.form} noValidate>
             <TextField
               variant="outlined"

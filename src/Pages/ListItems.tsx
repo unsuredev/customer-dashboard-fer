@@ -72,15 +72,15 @@ export const mainListItems = (
     </Link>
 
 
-{/* 
+
     <Link href="/customerDocs">
       <ListItem button>
         <ListItemIcon>
-          <BackupIcon color="secondary" />
+          <HistoryIcon color="secondary" />
         </ListItemIcon>
         <ListItemText primary="Upload Image" />
       </ListItem>
-    </Link> */}
+    </Link> 
 
 
 

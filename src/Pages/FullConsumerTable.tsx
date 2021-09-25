@@ -13,6 +13,9 @@ export default function FullConsumerTable() {
     const [data, setData] = React.useState([]);
     const [loading, setLoading] = React.useState(false)
     const [limit, setLimit]=React.useState(500)
+    const [newdata, setNewdata]=React.useState([])
+    const [show, setShow] = React.useState(false)
+
     const columns = [
         { title: 'Sl No', field: 'tableData.id' },
         { title: "Old SlNo", field: "slNo" },
@@ -43,21 +46,35 @@ export default function FullConsumerTable() {
     ];
 
 
-const fetcCustomerData=()=>{
+// const fetcCustomerData=()=>{
+//     setLimit(limit+500)
+//     setLoading(true)
+//     fetch(`https://jamanenterprise.herokuapp.com/customer/getAll?page=1&limit=${limit}`)
+//         .then(resp => resp.json())
+//         .then(resp => {
+//             setData(resp.data)
+//             setLoading(false)
+//         })
+// }
+
+const fetcCustomers=()=>{
     setLimit(limit+500)
     setLoading(true)
-    fetch(`https://jamanenterprise.herokuapp.com/customer/getAll?page=1&limit=${limit}`)
+    fetch(`http://localhost:4001/customer/getcustomers`)
         .then(resp => resp.json())
         .then(resp => {
-            setData(resp.data)
+            setNewdata(resp.data)
+            setShow(true)
             setLoading(false)
+
         })
 }
 
 
 
     React.useEffect(() => {
-        fetcCustomerData()
+        
+        fetcCustomers()
     }, [])
 
 
@@ -80,7 +97,6 @@ const fetcCustomerData=()=>{
             &nbsp; &nbsp; &nbsp; <Button
                             variant="contained"
                             color="primary"
-                            onClick={fetcCustomerData}
                         >
                             load More
                     </Button>
@@ -109,14 +125,15 @@ const fetcCustomerData=()=>{
                 }
                 {getUser()?
                  <div>
+                     {show?
       <CsvDownloader
         filename="JamanHpGas"
         extension=".csv"
         separator=";"
         wrapColumnChar="'"
-        datas={data}
+        datas={newdata}
         columns={column}
-        text="ONE CLICK DOWNLOAD ALL CUSTOMER  DATA" />
+        text="ONE CLICK DOWNLOAD ALL CUSTOMER  DATA" />:null}
     </div>:null}
             </Container>
         </React.Fragment>
