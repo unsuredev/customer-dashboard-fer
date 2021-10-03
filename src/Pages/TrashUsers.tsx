@@ -29,7 +29,7 @@ export default function TrashConsumerTable() {
     ]
     React.useEffect(() => {
         setLoading(true)
-        fetch("https://jamanenterprise.herokuapp.com/customer/trashCustomer")
+        fetch("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/customer/trashCustomer")
             .then(resp => resp.json())
             .then(resp => {
                 setData(resp.data)

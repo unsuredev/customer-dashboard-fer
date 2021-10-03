@@ -28,7 +28,6 @@ import teal from '@material-ui/core/colors/teal'
 import ClearIcon from '@material-ui/icons/Clear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 
-import UrlImageDownloader from 'react-url-image-downloader'
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -87,8 +86,15 @@ export default function ImageManagement() {
     const [install, setInstall] = React.useState({ preview: "", raw: "" });
     const [satis, setSatis ]= React.useState({ preview: "", raw: "" });
     const [other, setOther] = React.useState({ preview: "", raw: "" });
+    const [errorI , setErrorI]=  React.useState("")
+    const [errorS , setErrorS]=  React.useState("")
+    const [errorO , setErrorO]=  React.useState("")
 
-    const types = ["image/png", "image/jpeg", "image/jpg"];
+    const [installb, setInstallb]= React.useState(false)
+
+    const [satisb, setSatisb]= React.useState(false)
+
+    const [otherb, setOtherb]= React.useState(false)
 
 
 
@@ -120,14 +126,33 @@ export default function ImageManagement() {
 
 
 
-    const handleChangeInstall = (e:any) => {
+    const handleChangeInstall = (e: any) => {
         if (e.target.files.length) {
             setInstall({
                 preview: URL.createObjectURL(e.target.files[0]),
                 raw: e.target.files[0]
             });
+            setErrorI("")
+            setInstallb(true)
+
+        }
+        const file = e.target.files[0];
+        if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
+            window.alert("File does not support. You must use .png or .jpg ");
+            setErrorI('Select a valid image type')
+        }
+        if (file.size > 1000089) {
+            window.alert("Please upload a file smaller than 1 MB ");
+            setInstall({
+                preview: "",
+                raw: ""
+            });
+            setErrorI('Select a valid image size')
         }
     };
+
+
+
 
     const installRemoveImage = (e: any) => {
         e.preventDefault();
@@ -162,7 +187,21 @@ export default function ImageManagement() {
             setSatis({
                 preview: URL.createObjectURL(e.target.files[0]),
                 raw: e.target.files[0]
+            })
+            setSatisb(true)
+        }
+        const file = e.target.files[0];
+        if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
+            window.alert("File does not support. You must use .png or .jpg ");
+            setErrorS('Select a valid image type')
+        }
+        if (file.size > 1000089) {
+            window.alert("Please upload a file smaller than 1 MB ");
+            setSatis({
+                preview: "",
+                raw: ""
             });
+            setErrorS('Select a valid image size')
         }
     };
     const handleChangeOther = (e:any) => {
@@ -170,7 +209,21 @@ export default function ImageManagement() {
             setOther({
                 preview: URL.createObjectURL(e.target.files[0]),
                 raw: e.target.files[0]
+            })
+            setOtherb(true)
+        }
+        const file = e.target.files[0];
+        if (!file.name.match(/\.(jpg|jpeg|png)$/)) {
+            window.alert("File does not support. You must use .png or .jpg ");
+            setErrorO('Select a valid image type')
+        }
+        if (file.size > 1000089) {
+            window.alert("Please upload a file smaller than 1 MB ");
+            setOther({
+                preview: "",
+                raw: ""
             });
+            setErrorO('Select a valid image size')
         }
     };
 
@@ -183,7 +236,7 @@ export default function ImageManagement() {
         formData.append("image", install.raw);
         formData.append("mainAadhaar", mainAadhaar)
         formData.append("photo_key", "InstalationLetter");
-        fetch("https://jamanenterprise.herokuapp.com/customer/uploadimages", {
+        fetch("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/customer/uploadimages", {
             method: "POST",
             body: formData
         })
@@ -192,9 +245,7 @@ export default function ImageManagement() {
                 showToast(data.message, "success"),
                 //@ts-ignore
                 setInstall({ preview: "", raw: "" })
-
             )
-
             .catch((error) => {
                 showToast(error.message, "error")
             });
@@ -202,21 +253,20 @@ export default function ImageManagement() {
 
 
     const othereUpload = async (e: any, mainAadhaar: string) => {
-            e.preventDefault();
-            const formData = new FormData();
-            formData.append("image", other.raw);
-            formData.append("mainAadhaar", mainAadhaar)
-            formData.append("photo_key", "otherLetter");
-           await fetch("https://jamanenterprise.herokuapp.com/customer/uploadimages", {
-                method: "POST",
-                body: formData
-            })
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", other.raw);
+        formData.append("mainAadhaar", mainAadhaar)
+        formData.append("photo_key", "otherLetter");
+        await fetch("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/customer/uploadimages", {
+            method: "POST",
+            body: formData
+        })
             .then(response => response.json())
             .then(data =>
                 showToast(data.message, "success"),
-                        //@ts-ignore
-                        setOther({ preview: "", raw: "" })
-
+                //@ts-ignore
+                setOther({ preview: "", raw: "" })
             )
             .catch((error) => {
                 showToast(error.message, "error")
@@ -231,7 +281,7 @@ export default function ImageManagement() {
             formData.append("image", satis.raw);
             formData.append("mainAadhaar", mainAadhaar)
             formData.append("photo_key", "satisfactionLetter");
-            const result = await fetch("https://jamanenterprise.herokuapp.com/customer/uploadimages", {
+            const result = await fetch("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/customer/uploadimages", {
                 method: "POST",
                 body: formData
             })
@@ -350,7 +400,7 @@ export default function ImageManagement() {
                                                 <Typography>Sub Agent : {user.subAgent || "NA"}</Typography>
                                                 <Typography>Remarks : {user.remarks || "NA"}</Typography>
                                                 {/* @ts-ignore */}
-                                                <Typography>Created On : {user.date || "NA"}</Typography>
+                                                <Typography>Created On : {user.createdAt     || "NA"}</Typography>
                                                 <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
                                             </div>
                                                    {/* @ts-ignore */}
@@ -365,22 +415,21 @@ export default function ImageManagement() {
                                             <label htmlFor="upload-button1">
                                                 {install.preview ? (
                                                     <img src={install.preview} alt="install" width="300" height="300" />
-                                                ) : (
-                                                        <div style={{ display: "flex" }}>
-                                                            <Typography>CHOOSE  INSTALLATION PHOTO </Typography>
-                                                            &nbsp; <BackupIcon />
-                                                        </div>
-                                                )}
+                                                ) : null  }
                                             </label>
                                             <input
                                                 type="file"
                                                 id="upload-button1"
                                                 // style={{ display: "none" }}
                                                 onChange={handleChangeInstall}
+                                                accept="image/*"
                                             />
                                             <br />
+                                            <span style={{color:"red"}}>{errorI}</span>
                                             <br />
-
+                                            <br />
+                                                {installb?
+                                                <div>
                                             <Button
                                                 size="medium"
                                                 variant="contained"
@@ -399,6 +448,7 @@ export default function ImageManagement() {
                                             >
                                                 Reset Photo
                                             </Button>
+                                            </div>:null}
                                         </Grid >
                                         <br/>
                                         <Grid item xs={12}
@@ -408,26 +458,25 @@ export default function ImageManagement() {
                                             <label htmlFor="upload-button2">
                                                 {satis.preview ? (
                                                     <img src={satis.preview} alt="dummy" width="300" height="300" />
-                                                ) : (
-                                                        <div style={{ display: "flex" }}>
-                                                            <Typography>CHOOSE SATISFACTION LETTER  PHOTO </Typography>
-                                                            &nbsp; <BackupIcon />
-                                                        </div>
-                                                )}
+                                                ) :  null}
                                             </label>
                                             <input
                                                 type="file"
                                                 id="upload-button2"
                                                 // style={{ display: "none" }}
                                                 onChange={handleChangeSatis}
+                                                accept="image/*"
                                             />
+                                               <br />
+                                            <span style={{color:"red"}}>{errorS}</span>
                                             <br />
                                             <br />
-
-                                            
+                                            {satisb?
+                                                <div>
                                             <Button
                                                 size="medium"
                                                 variant="contained"
+                                                color="primary"
                                                 style={{backgroundColor:"#f44336"}}
                                                 onClick={(e) => { satisUpload(e, user.mainAadhaar) }}
                                             >
@@ -438,10 +487,10 @@ export default function ImageManagement() {
                                                 variant="contained"
                                                 color="inherit"
                                                 onClick={satisRemoveImage}
-
                                             >
                                                 Reset Photo
                                             </Button>
+                                            </div>:null}
                                         </Grid>
                                         
                                         <Grid item xs={12}
@@ -451,25 +500,25 @@ export default function ImageManagement() {
                                             <label htmlFor="upload-button3">
                                                 {other.preview ? (
                                                     <img src={other.preview} alt="dummy" width="300" height="300" />
-                                                ) : (
-                                                        <div style={{ display: "flex" }}>
-                                                            <Typography>CHOOSE OTHER PHOTO </Typography>
-                                                            &nbsp; <BackupIcon />
-                                                        </div>
-                                                )}
+                                                ) :  null}
                                             </label>
                                             <input
                                                 type="file"
                                                 id="upload-button3"
                                                 // style={{ display: "none" }}
                                                 onChange={handleChangeOther}
+                                                accept="image/*"
                                             />
+                                               <br />
+                                            <span style={{color:"red"}}>{errorO}</span>
                                             <br />
                                             <br />
-
+                                            {otherb?
+                                                <div>
                                             <Button
                                                 variant="contained"
                                                 style={{backgroundColor:"#8bc34a"}}
+                                                color="primary"
                                                 onClick={(e) => { othereUpload(e, user.mainAadhaar) }}
                                             >
                                                 Submit Other Photo
@@ -482,6 +531,8 @@ export default function ImageManagement() {
                                             >
                                                 Reset Photo
                                             </Button>
+                                            </div>:null
+                                            }
                                         </Grid>
                                     </Grid>
                     </Container>

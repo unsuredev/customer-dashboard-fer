@@ -12,7 +12,6 @@ import { useHistory } from "react-router"
 import jwt_decode from "jwt-decode";
 import ResponsiveDrawer from "./Drawer";
 
-//http://localhost:4001/user/changepassword
 
 
 
@@ -82,7 +81,7 @@ const ResetPassword = () => {
 
     const handleReset = async () => {
         try {
-            const result = await axios.post("https://jamanenterprise.herokuapp.com/user/changepassword",
+            const result = await axios.post("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/user/changepassword",
             {
                 "old_password":user.old_password,
                 "password":user.new_password,

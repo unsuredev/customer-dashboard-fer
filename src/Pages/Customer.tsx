@@ -122,7 +122,7 @@ const Customer = () => {
     }
 
     async function getCharacters() {
-      const response = await fetch("https://jamanenterprise.herokuapp.com/agent/getall");
+      const response = await fetch("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/agent/getall");
       const body = await response.json();
       console.log("res==>", body.data.result)
       setAgetList(body.data.result)

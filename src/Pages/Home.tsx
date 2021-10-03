@@ -33,9 +33,12 @@ import moment from "moment";
 import jwt_decode from "jwt-decode";
 import { BASE_URL } from "../Common/constant";
 import axios from "axios";
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from "@material-ui/core/Select";
 
 import ResponsiveDrawer from "./Drawer";
-
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(2),
@@ -72,6 +75,12 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
+  },
+  formControl: {
+    minWidth: "100%",
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
   media: {
     height: 340,
@@ -199,10 +208,13 @@ const Home = () => {
   }
 
 
+  
+
   const handleChange = (event: any) => {
     setState({ ...state, [event.target.name]: event.target.value });
     //@ts-ignore
   };
+  const [agentList, setAgetList] = React.useState([]);
 
 
   const [customer, setCustomer] = React.useState({
@@ -218,12 +230,31 @@ const Home = () => {
     addedBy: "",
   });
 
+  const handleChangeAgent = (event: any) => {
+    console.log("agent" ,event.target.value)
+    setCustomer({ ...customer, [event.target.name]: event.target.value });
+    //@ts-ignore
+  }
+
   const handleChangeUser = (event: any) => {
     setCustomer({ ...customer, [event.target.name]: event.target.value });
     //@ts-ignore
   };
 
 
+
+  const findAdmin = () => {
+    let token: any = localStorage.getItem("access_token");
+
+    var decoded = jwt_decode(token);
+    //@ts-ignore
+    let { email } = decoded;
+    if (email === "jaman2021@gmail.com") {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const handleFind = async (event: any) => {
     try {
@@ -332,7 +363,7 @@ const Home = () => {
     document.title = "Customer | JAMAN HP";
     findName()
     getUser()
-
+    getCharacters()
     const timer = setInterval(() => {
       setDate(new Date());
     }, 60 * 1000);
@@ -340,6 +371,24 @@ const Home = () => {
       clearInterval(timer);
     };
   }, []);
+
+
+
+    async function getCharacters() {
+      const response = await fetch("http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/agent/getall");
+      const body = await response.json();
+      setAgetList(body.data.result)
+      //@ts-ignore
+      setAgetList(body.data.result.map(({ name  }) => ({ label: name, value: name })));
+
+    }
+ 
+
+
+
+
+
+
 
   return (
     <React.Fragment>
@@ -528,7 +577,7 @@ const Home = () => {
                         <Typography>Remarks : {user.remarks|| "NA"}</Typography>
                         {/* @ts-ignore */}
 
-                        <Typography>Created On : {user.date || "NA"}</Typography>
+                        <Typography>Created On : {user.createdAt || "NA"}</Typography>
 
                         <Typography variant="subtitle2" gutterBottom color="primary">Added By : {user.addedBy || "NA"}</Typography>
                         {user.updatedAt != undefined &&
@@ -649,16 +698,31 @@ const Home = () => {
                                 />
                               
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
-                 
-                              <Typography style={{color:"white", backgroundColor:"black"}} variant="h5"  gutterBottom> &nbsp;  &nbsp;Main Agent : {customer.mainAgent}</Typography>
-                            </Grid>
-
-                    
         
+                  
+                                <Typography style={{color:"white", backgroundColor:"black"}} variant="h5"  gutterBottom> &nbsp;  &nbsp;Main Agent : {customer.mainAgent}</Typography>
+                                {getUser() ? (
                             <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
-
+                              <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-required-label">Update new Agent *</InputLabel>
+                                <Select
+                                  onChange={handleChangeAgent}
+                                  displayEmpty
+                                  className={classes.selectEmpty}
+                                  labelId="demo-simple-select-outlined-label"
+                                  id="demo-simple-select-outlined"
+                                  inputProps={{ 'aria-label': 'Without label' }}
+                                  name="mainAgent"
+                                >
+                                  {agentList.map(item => (
+                                    <MenuItem
+                                      //@ts-ignore
+                                      key={item.label} value={item.value} >{item.label}</MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+                            </Grid>):null}
+                            <Grid item xs={12} sm={12} md={12} style={{ margin: "5px" }}>
                               <TextField
                                 id="outlined-basic"
                                 label="Sub Agent"

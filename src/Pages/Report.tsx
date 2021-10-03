@@ -112,7 +112,7 @@ const Reports = () => {
     const fetcCustomers=()=>{
         setLimit(limit+500)
         setLoading(true)
-        fetch(`http://localhost:4001/customer/getcustomers`)
+        fetch(`http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/customer/getcustomers`)
             .then(resp => resp.json())
             .then(resp => {
                 setNewdata(resp.data)
@@ -207,9 +207,9 @@ const Reports = () => {
                     </Container>
                 </div>
             </main>
-            {/* <Container>
+            <Container>
                 <FullConsumerTable />
-            </Container> */}
+            </Container>
             <FooterSection />
 
         </React.Fragment >

@@ -46,21 +46,12 @@ export default function FullConsumerTable() {
     ];
 
 
-// const fetcCustomerData=()=>{
-//     setLimit(limit+500)
-//     setLoading(true)
-//     fetch(`https://jamanenterprise.herokuapp.com/customer/getAll?page=1&limit=${limit}`)
-//         .then(resp => resp.json())
-//         .then(resp => {
-//             setData(resp.data)
-//             setLoading(false)
-//         })
-// }
+
 
 const fetcCustomers=()=>{
     setLimit(limit+500)
     setLoading(true)
-    fetch(`http://localhost:4001/customer/getcustomers`)
+    fetch(`http://ec2-13-233-86-104.ap-south-1.compute.amazonaws.com:4001/customer/getcustomers`)
         .then(resp => resp.json())
         .then(resp => {
             setNewdata(resp.data)
